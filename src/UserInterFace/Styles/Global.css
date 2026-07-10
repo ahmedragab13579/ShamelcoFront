@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  /* ألوانك الأساسية بعد ترتيبها (قاعدة 60-30-10) */
+  --color-shamelco-bg: #F8FAFC;       /* 60% - الخلفية الأساسية المريحة للعين */
+  
+  --color-shamelco-darker: #041C32;   /* 30% - أغمق درجة (للنصوص الأساسية والقوائم) */
+  --color-shamelco-dark: #04293A;     /* 30% - درجة متوسطة (للكروت الغامقة) */
+  --color-shamelco-accent: #064663;   /* 30% - أزرق بترولي (للعناصر الثانوية) */
+  
+  --color-shamelco-gold: #ECB365;     /* 10% - لون الأكشن والتمييز (الزراير المهمة) */
+
+  /* ألوان الحالات (Semantic Colors) */
+  --color-status-success: #10B981;    /* أخضر - للنجاح */
+  --color-status-danger: #EF4444;     /* أحمر - للخطأ أو الحذف */
+  --color-status-warning: #F59E0B;    /* برتقالي/أصفر - للتحذير */
+}
+
+@layer base {
+  body {
+    /* خلينا الخلفية فاتحة مريحة، والنص باللون الكحلي الغامق جداً للقراءة */
+    @apply bg-shamelco-bg text-shamelco-darker m-0 p-0 box-border antialiased font-sans;
+  }
+}
+
+/* تظبيط الـ Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-shamelco-dark);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  /* خلينا الهوفر بلون التمييز عشان ينطق ويدي حركة حلوة */
+  background-color: var(--color-shamelco-gold);
+}
