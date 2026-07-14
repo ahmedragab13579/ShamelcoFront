@@ -1,7 +1,30 @@
+export type NotificationType =
+  | "UpdateProfile"
+  | "RescheduleBooking"
+  | "ChangePassword"
+  | "CancelBooking"
+  | "CreateBooking"
+  | "AddReview"
+  | "SuccessPayment"
+  | "FailPayment"
+  | "CreatePlace"
+  | "UpdatePlace"
+  | "BlockPlace"
+  | "AddConsole"
+  | "AddStaff"
+  | "AddTable"
+  | "AssignConsole"
+  | "UnassignConsole"
+  | "DeleteConsole"
+  | "DeleteTable"
+  | "RemoveConsole"
+  | "RevokeStaff"
+  | "UpdateTable";
+
 export type BookingStatus = "Pending" | "Confirmed" | "InProgress" | "CheckedIn" | "Cancelled" | "NoShow" | "Completed";
 export type ConsoleStatus = "Idle" | "Active" | "Maintenance";
 export type PaymentMethod = "Cash" | "Card" | "MobileWallet";
-export type PaymentStatus = "Pending" | "Completed" | "Refunded"| "Failed";
+export type PaymentStatus = "Pending" | "Completed" | "Refunded" | "Failed";
 export type TransactionType = "Credit" | "Debit";
 export type JsonValue =
   | string
@@ -14,11 +37,286 @@ export type JsonValue =
 export type PayoutStatus = "Pending" | "Approved" | "Rejected";
 export type PitchStatus = "Available" | "Blocked" | "Maintenance";
 export type PitchType = "FiveASide" | "SixASide" | "Tennis" | "Padel";
-export type PlaceSubType = VenueType  |  PitchType;
+export type PlaceSubType = VenueType | PitchType;
 
-export type PlaceType = "Venue" | "Pitch"|"unknownPlaceType";
+export type PlaceType = "Venue" | "Pitch" | "unknownPlaceType";
 export type SessionStatus = "Active" | "Completed" | "Cancelled" | "NotStart";
 export type TableStatus = "Available" | "Occupied" | "Reserved" | "Maintenance" | "Unavailable";
 export type UserType = "Owner" | "Staff" | "Customer";
 export type VenueType = "Billiard" | "Cafe";
-export type VenueStaffRole = "Cashier" | "Manager"|"Waiter";
+export type VenueStaffRole = "Cashier" | "Manager" | "Waiter";
+
+export type AppMessageCodes =
+  // ==========================================
+  // 1. General
+  // ==========================================
+  | 'INVALID_DATA'
+  | 'OPERATION_FAILED'
+  | 'OPERATION_SUCCESSFUL'
+  | 'GENERAL_ERROR'
+  | 'UNAUTHORIZED_ACCESS'
+  | 'FORBIDDEN'
+  | 'ACCESS_DENIED'
+  | 'INVALID_PAGE'
+  | 'INVALID_PAGE_SIZE'
+  | 'MISSING_PLACE_ID'
+  | 'CONCURRENCY_CONFLICT'
+
+  // ==========================================
+  // 1. Services
+  // ==========================================
+  | 'UPLOAD_FAILED'
+  | 'UPLOAD_SUCCESS'
+  | 'UPDATE_SUCCESS'
+  | 'FILE_REQUIRED'
+
+  // ==========================================
+  // 2. Auth
+  // ==========================================
+  | 'INVALID_CREDENTIALS'
+  | 'CURRENT_PASSWORD_REQUIRED'
+  | 'NEW_PASSWORD_REQUIRED'
+  | 'NEW_PASSWORD_MUST_BE_DIFFERENT'
+  | 'PASSWORDS_DO_NOT_MATCH'
+  | 'EMAIL_REQUIRED'
+  | 'PASSWORD_REQUIRED'
+  | 'TOKEN_REQUIRED'
+  | 'ID_TOKEN_REQUIRED'
+  | 'REFRESH_TOKEN_REQUIRED'
+  | 'NAME_REQUIRED'
+  | 'USER_TYPE_REQUIRED'
+  | 'LOGIN_SUCCESSFUL'
+  | 'REGISTRATION_SUCCESSFUL'
+  | 'INVALID_TOKEN'
+  | 'TOKEN_EXPIRED'
+  | 'TOKEN_REVOKED'
+  | 'FAILED_TO_CREATE_USER'
+  | 'FAILED_TO_CREATE_PROFILE'
+  | 'FAILED_TO_CREATE_REFRESH_TOKEN'
+  | 'PASSWORD_RESET_LINK_SENT'
+  | 'PASSWORD_RESET_SUCCESSFULLY'
+  | 'GOOGLE_TOKEN_MISSING_EMAIL'
+  | 'UNSUPPORTED_USER_TYPE'
+  | 'ME_SUCCESS'
+  | 'NO_TOKEN_PROVIDED'
+
+  // ==========================================
+  // Paymob & Webhooks
+  // ==========================================
+  | 'INVALID_PAYLOAD_STRUCTURE'
+  | 'PAYLOAD_READ_FAILED'
+  | 'HMAC_VERIFICATION_FAILED'
+  | 'HMAC_VERIFIED_SUCCESSFULLY'
+  | 'PAYMOB_API_ERROR'
+
+  // ==========================================
+  // 3. User & Staff
+  // ==========================================
+  | 'EMAIL_ALREADY_EXISTS'
+  | 'EMPTY_FULL_NAME'
+  | 'EMPTY_USER_NAME'
+  | 'INVALID_EMAIL'
+  | 'INVALID_FULL_NAME'
+  | 'INVALID_PHONE'
+  | 'PROFILE_UPDATED_SUCCESSFULLY'
+  | 'USER_ADDED_SUCCESSFULLY'
+  | 'USER_NOT_FOUND'
+  | 'STAFF_ADDED_SUCCESSFULLY'
+  | 'STAFF_PROFILE_CREATED_SUCCESSFULLY'
+  | 'STAFF_MEMBER_GRANTED_ACCESS'
+  | 'REVOKE_STAFF_SUCCESSFULLY'
+  | 'STAFF_ACCESS_REVOKED_SUCCESSFULLY'
+  | 'STAFF_RETRIEVED_SUCCESSFULLY'
+  | 'STAFF_GRANT_NOT_FOUND'
+  | 'STAFF_GRANT_ALREADY_REVOKED'
+  | 'USER_ALREADY_ACTIVE_STAFF'
+  | 'EMPTY_EMPLOYEE_NUMBER'
+  | 'INVALID_VENUE_ID'
+  | 'VENUE_REQUIRED'
+  | 'NULL_STAFF'
+
+  // ==========================================
+  // 4. Booking
+  // ==========================================
+  | 'BOOKING_CREATED_SUCCESSFULLY'
+  | 'BOOKING_CANCELLED_SUCCESSFULLY'
+  | 'BOOKING_RESCHEDULED'
+  | 'BOOKING_RETRIEVED_SUCCESSFULLY'
+  | 'BOOKINGS_RETRIEVED_SUCCESSFULLY'
+  | 'BOOKING_NOT_FOUND'
+  | 'BOOKING_ALREADY_CANCELLED'
+  | 'BOOKING_TIME_IN_PAST'
+  | 'BOOKING_EXCEEDS_MAX_DURATION'
+  | 'CANCELLATION_NOT_PERMITTED'
+  | 'CANNOT_RESCHEDULE'
+  | 'CANNOT_CANCEL_BOOKING'
+  | 'INVALID_BOOKING_DURATION'
+  | 'INVALID_BOOKING_STATUS_TRANSITION'
+  | 'NULL_BOOKING'
+  | 'BOOKING_ATTACHED_SUCCESSFULLY'
+
+  // ==========================================
+  // 5. Pitch & Venue
+  // ==========================================
+  | 'PITCH_ADDED_SUCCESSFULLY'
+  | 'PITCH_UPDATED_SUCCESSFULLY'
+  | 'PITCH_NOT_FOUND'
+  | 'PITCH_NOT_AVAILABLE'
+  | 'PITCH_RETRIEVED_SUCCESSFULLY'
+  | 'PITCHES_RETRIEVED_SUCCESSFULLY'
+  | 'AVAILABILITY_RETRIEVED_SUCCESSFULLY'
+  | 'EMPTY_PITCH_ADDRESS'
+  | 'EMPTY_PITCH_IMAGE'
+  | 'EMPTY_PITCH_NAME'
+  | 'INVALID_HOURLY_RATE'
+  | 'NEGATIVE_HOURLY_RATE'
+  | 'INVALID_OWNER_ID'
+  | 'INVALID_PITCH_ID'
+  | 'PITCH_BLOCKED_SUCCESSFULLY'
+  | 'PITCH_BLOCKED_WARNING'
+  | 'BLOCK_TIME_IN_PAST'
+  | 'EMPTY_BLOCK_REASON'
+  | 'INVALID_BLOCK_TIME'
+  | 'VENUE_ADDED_SUCCESSFULLY'
+  | 'VENUE_UPDATED_SUCCESSFULLY'
+  | 'VENUE_NOT_FOUND'
+  | 'VENUE_NOT_ACTIVE'
+  | 'VENUE_NOT_AVAILABLE'
+  | 'VENUE_RETRIEVED_SUCCESSFULLY'
+  | 'VENUES_RETRIEVED_SUCCESSFULLY'
+  | 'EMPTY_VENUE_NAME'
+  | 'EMPTY_VENUE_IMAGE'
+  | 'EMPTY_OWNER_ID'
+  | 'INVALID_CAPACITY'
+  | 'INVALID_VENUE_LOCATION'
+  | 'INVALID_VENUE_WORKING_HOURS'
+  | 'EMPTY_BUSINESS_NAME'
+  | 'EMPTY_TAX_NUMBER'
+  | 'OWNER_NOT_FOUND'
+  | 'OWNER_PROFILE_CREATED_SUCCESSFULLY'
+  | 'OWNER_PROFILE_UPDATED_SUCCESSFULLY'
+  | 'FLOOR_PLAN_LOADED'
+
+  // ==========================================
+  // 6. Table & Console
+  // ==========================================
+  | 'TABLE_CREATED_SUCCESSFULLY'
+  | 'TABLE_UPDATED_SUCCESSFULLY'
+  | 'TABLE_DISABLED_SUCCESSFULLY'
+  | 'TABLE_REMOVED_SUCCESSFULLY'
+  | 'TABLE_DELETED_SUCCESSFULLY'
+  | 'TABLE_RETRIEVED_SUCCESSFULLY'
+  | 'TABLE_NOT_FOUND'
+  | 'TABLE_NUMBER_ALREADY_EXISTS'
+  | 'TABLE_ALREADY_HAS_CONSOLE'
+  | 'CANNOT_DELETE_OCCUPIED_TABLE'
+  | 'CANNOT_DELETE_TABLE_WITH_HISTORY'
+  | 'TARGET_TABLE_NOT_AVAILABLE'
+  | 'TARGET_TABLE_NOT_FOUND'
+  | 'NULL_TABLE'
+  | 'INVALID_TABLE_ID'
+  | 'INVALID_TABLE_NUMBER'
+  | 'INVALID_TABLE_RATE'
+  | 'CONSOLE_CREATED_SUCCESSFULLY'
+  | 'CONSOLE_ADDED_SUCCESSFULLY'
+  | 'CONSOLE_ASSIGNED_SUCCESSFULLY'
+  | 'CONSOLE_REMOVED_SUCCESSFULLY'
+  | 'CONSOLE_DELETED_SUCCESSFULLY'
+  | 'CONSOLE_NOT_FOUND'
+  | 'CONSOLES_RETRIEVED_SUCCESSFULLY'
+  | 'CONSOLE_SERIAL_NUMBER_ALREADY_EXISTS'
+  | 'CANNOT_DELETE_ACTIVE_CONSOLE'
+  | 'CANNOT_REASSIGN_ACTIVE_CONSOLE'
+  | 'CONSOLE_SOURCE_TABLE_OCCUPIED'
+  | 'NULL_CONSOLE'
+  | 'EMPTY_CONSOLE_NAME'
+  | 'CONSOLE_ALREADY_STARTED'
+  | 'CONSOLE_STARTED_SUCCESSFULLY'
+  | 'CONSOLE_NOT_STARTED'
+  | 'CONSOLE_ALREADY_CLOSED'
+  | 'CONSOLE_ENDED_SUCCESSFULLY'
+
+  // ==========================================
+  // 7. Customer & Session
+  // ==========================================
+  | 'CUSTOMER_PROFILE_CREATED_SUCCESSFULLY'
+  | 'NEGATIVE_POINTS'
+  | 'NOT_ENOUGH_POINTS'
+  | 'POINTS_REDEEMED_SUCCESSFULLY'
+  | 'PITCH_SESSION_CREATED'
+  | 'WALK_IN_SESSION_CREATED'
+  | 'SESSION_ADDED_SUCCESSFULLY'
+  | 'SESSION_STARTED_SUCCESSFULLY'
+  | 'SESSION_CLOSED'
+  | 'SESSION_COMPLETED'
+  | 'ALREADY_COMPLETED'
+  | 'ONLY_ACTIVE_SESSIONS_CAN_BE_EXTENDED'
+  | 'SESSION_EXTENSION_APPROVED'
+  | 'CUSTOMER_OR_WALK_IN_REQUIRED'
+  | 'INVALID_DATE'
+  | 'INVALID_END_TIME'
+  | 'INVALID_ID'
+  | 'INVALID_IDENTIFIER'
+  | 'NULL_PAYMENT'
+  | 'PARTIAL_PAYMENT_NOT_ALLOWED'
+  | 'PAYMENT_ATTACHED_AND_SESSION_CLOSED'
+  | 'PAYMENT_ATTACHMENT_FAILED_ACTIVE_SESSION'
+  | 'INVALID_HMAC'
+  | 'PAYMENT_RECORDED_FAIL'
+  | 'SUCCESS_WEB_HOCK'
+
+  // ==========================================
+  // 8. Finance
+  // ==========================================
+  | 'PAYMENT_WAS_ADDED_SUCCESSFULLY'
+  | 'INVALID_PAYMENT'
+  | 'INVALID_PAYMENT_AMOUNT'
+  | 'INVALID_TRANSACTION_REFERENCE'
+  | 'PAYMENT_RECORD_CREATED_SUCCESSFULLY'
+  | 'PAYMENT_INITIATION_FAILED'
+  | 'PAYMENT_LINK_GENERATED_SUCCESSFULLY'
+  | 'FAILED_TO_GET_WALLET_REDIRECT_URL'
+  | 'BOOKING_ALREADY_PAID_OR_CANCELLED'
+  | 'INVALID_WALLET_ID'
+  | 'AMOUNT_MUST_BE_GREATER_THAN_ZERO'
+  | 'TRANSACTION_CREATED_SUCCESSFULLY'
+  | 'INVALID_BOOKING_ID'
+  | 'BOOKING_ADDED_TO_TRANSACTION'
+  | 'ACCOUNT_DETAILS_REQUIRED'
+  | 'PAYOUT_REQUEST_CREATED_SUCCESSFULLY'
+  | 'REQUEST_ALREADY_PROCESSED'
+  | 'REQUEST_PROCESSED_SUCCESSFULLY'
+  | 'INVALID_PROVIDER_ID'
+  | 'WALLET_CREATED_SUCCESSFULLY'
+  | 'INSUFFICIENT_BALANCE'
+  | 'TRANSACTION_ADDED_AND_BALANCE_UPDATED'
+  | 'INSUFFICIENT_BALANCE_FOR_PAYOUT'
+  | 'PENDING_PAYOUT_REQUEST_EXISTS'
+  | 'PAYOUT_REQUEST_SUBMITTED_SUCCESSFULLY'
+
+  // ==========================================
+  // 9. Review, Notification & Reports
+  // ==========================================
+  | 'REVIEW_CREATED_SUCCESSFULLY'
+  | 'REVIEW_UPDATED_SUCCESSFULLY'
+  | 'REVIEW_SUBMITTED_SUCCESSFULLY'
+  | 'REVIEW_RETRIEVED_SUCCESSFULLY'
+  | 'REVIEW_NOT_FOUND'
+  | 'ALREADY_REVIEWED'
+  | 'INVALID_CUSTOMER_ID'
+  | 'INVALID_PLACE_ID'
+  | 'INVALID_RATING'
+  | 'NULL_REVIEW'
+  | 'PASSWORD_TITLE'
+  | 'PASSWORD_DESCRIPTION'
+  | 'NOTIFICATION_NOT_FOUND'
+  | 'NOTIFICATION_MARKED_AS_READ_SUCCESSFULLY'
+  | 'NOTIFICATIONS_RETRIEVED_SUCCESSFULLY'
+  | 'NOTIFICATION_ALREADY_READ'
+  | 'NOTIFICATION_ACCESS_DENIED'
+  | 'PITCH_DASHBOARD_RETRIEVED_SUCCESSFULLY'
+  | 'VENUE_DASHBOARD_RETRIEVED_SUCCESSFULLY'
+  | 'EXPORT_DATA_GENERATED_SUCCESSFULLY'
+  | 'KPIS_RETRIEVED_SUCCESSFULLY'
+  | 'OCCUPANCY_RETRIEVED_SUCCESSFULLY'
+  | 'PAYMENT_BREAKDOWN_RETRIEVED_SUCCESSFULLY';

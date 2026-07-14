@@ -9,6 +9,7 @@ import Error from "../Components/Common/Error";
 import { useLogoutMutation } from "../../BackEndIntegration/Hooks/Mutations/useAuthMutations";
 import NotificationSidebar from "../Components/LayOut/NotificationSidebar";
 import asGUID from "../../BackEndIntegration/Types/shared/Guid";
+import { useLanguage } from "../Hooks/Shared/useLanguage";
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
@@ -16,6 +17,7 @@ export default function DashboardLayout() {
   
   const { user, logoutState } = useAuth(); 
   const nav = useNavigate();
+  const { t } = useLanguage();
   
   let homePath = "/dashboard";
   if (user?.pitchId) {
@@ -34,16 +36,17 @@ export default function DashboardLayout() {
         nav("/", { replace: true });
       },
       onError: (error) => {
-        console.error("فشل تسجيل الخروج:", error);
+        // 1. استبدال النص العربي الثابت بالترجمة
+        console.error(t('messages.LOGOUT_ERROR'), error);
       }
     });
   }
 
-  if (isPending) return <Loading text="جارِ تسجيل الخروج..."/>;
-  if (isError) return <Error text="حدث خطأ أثناء تسجيل الخروج"/>; 
+  if (isPending) return <Loading text={t('messages.LOGGING_OUT')} />;
+  if (isError) return <Error text={t('messages.LOGOUT_ERROR')} />; 
 
   return (
-    <div className="min-h-screen bg-shamelco-bg flex text-shamelco-darker" dir="rtl">
+    <div className="min-h-screen bg-shamelco-bg flex text-shamelco-darker font-sans selection:bg-shamelco-gold selection:text-shamelco-darker">
         
       <DashboardSidebar 
         isSidebarOpen={isSidebarOpen} 
@@ -56,17 +59,16 @@ export default function DashboardLayout() {
         <DashboardHeader 
           setIsSidebarOpen={setIsSidebarOpen} 
           setIsNotifSidebarOpen={setIsNotifSidebarOpen}
-          userId={asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")}
+          userId={asGUID(user?.userId || "00000000-0000-0000-0000-000000000000")}
           userName={user?.name || ""}
         />
 
-        <div className="flex-1 overflow-auto w-full relative">
+        <div className="flex-1 overflow-auto w-full relative custom-scrollbar">
           <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
-             <Outlet />
+            <Outlet />
           </div>
           
-          {/* شريط الإشعارات الجانبي */}
-          {isNotifSidebarOpen &&  (
+          {isNotifSidebarOpen && (
             <NotificationSidebar 
               isOpen={isNotifSidebarOpen} 
               onClose={() => setIsNotifSidebarOpen(false)}

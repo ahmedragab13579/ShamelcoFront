@@ -1,4 +1,5 @@
 import { MdSportsSoccer, MdSportsEsports } from "react-icons/md";
+import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
 interface PlaceTypeTabsProps {
   activePlaceType: string;
@@ -6,6 +7,8 @@ interface PlaceTypeTabsProps {
 }
 
 export default function PlaceTypeTabs({ activePlaceType, onPlaceTypeChange }: PlaceTypeTabsProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex bg-shamelco-dark/5 p-1 rounded-xl mb-4">
       <button
@@ -17,7 +20,7 @@ export default function PlaceTypeTabs({ activePlaceType, onPlaceTypeChange }: Pl
         }`}
       >
         <MdSportsSoccer size={20} />
-        ملاعب
+        {t('messages.PITCHES')}
       </button>
 
       <button
@@ -29,7 +32,7 @@ export default function PlaceTypeTabs({ activePlaceType, onPlaceTypeChange }: Pl
         }`}
       >
         <MdSportsEsports size={20} />
-        صالات ومحلات
+        {t('messages.VENUES_AND_STORES')}
       </button>
     </div>
   );

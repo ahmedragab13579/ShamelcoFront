@@ -1,14 +1,17 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import errorIllust from "../../Images/errororofflineUI.png";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 export default function ErrorPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const { 
-    title = "عذراً، حدث خطأ ما!", 
-    message = "لم نتمكن من إتمام العملية. قد تكون هناك مشكلة مؤقتة أو أن الصلاحيات غير كافية.", 
+    title = t('messages.DEFAULT_ERROR_TITLE'), 
+    message = t('messages.DEFAULT_ERROR_MESSAGE'), 
     redirectUrl = -1, 
-    buttonText = "حاول مرة أخرى / العودة" 
+    buttonText = t('messages.DEFAULT_ERROR_BUTTON') 
   } = location.state || {};
 
   const handleAction = () => {
@@ -25,27 +28,13 @@ export default function ErrorPage() {
       {/* نفس الكارت المركزي */}
       <div className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl shadow-shamelco-dark/5 max-w-lg w-full text-center border border-shamelco-dark/5 flex flex-col items-center">
         
-        {/* حاوية الأيقونة مع حركة اهتزاز خفيفة (مستوحاة من الـ Scrollbar hover الخاص بك) */}
-        <div className="relative mb-8 flex items-center justify-center group">
-          {/* تأثير نبض أحمر خفيف */}
-          <span className="animate-pulse absolute inline-flex h-20 w-20 rounded-full bg-status-danger/15"></span>
-          
-          {/* دائرة الأيقونة باللون الأحمر (--color-status-danger) */}
-          <div className="relative rounded-full bg-status-danger p-4 border-4 border-white shadow-lg transition-transform duration-300 group-hover:scale-110">
-            <svg 
-              className="w-12 h-12 text-white" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth="2.5" 
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
-            </svg>
-          </div>
+        {/* حاوية الرسمة التوضيحية للخطأ أو حالة الأوفلاين */}
+        <div className="relative mb-6 flex items-center justify-center w-48 h-48">
+          <img 
+            src={errorIllust} 
+            alt={title} 
+            className="w-full h-full object-contain transform hover:scale-105 transition-transform duration-500" 
+          />
         </div>
 
         {/* النص باللون الكحلي الغامق جداً */}

@@ -1,4 +1,4 @@
 export default interface SuccessResult<T> {
-  message: string;
+  code: string;
   data: T;
 }

@@ -64,7 +64,7 @@ export const useExportDataMutation = () => {
       toast.success("تم تحميل الملف بنجاح!")
     },
     onError: (error) => {
-      toast.error("حدث خطأ أثناء تصدير البيانات:"+ error.error);
+      toast.error("حدث خطأ أثناء تصدير البيانات:"+ error.code);
     },
   });
 };

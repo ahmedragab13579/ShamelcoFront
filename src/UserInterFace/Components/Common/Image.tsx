@@ -1,17 +1,18 @@
-import pitchImage from "../../Images/Filed.jpg"; 
-import cafe from "../../Images/Cafe.jpg";
-import Billiard from "../../Images/Billiard.jpg";
-import tennis from "../../Images/tennis-court-render-3d-illustration.jpg";
+import soccerField from "../../Images/premium_synthetic_turf_football_field_at_nig.jpg"; 
+import sportsCafe from "../../Images/premium_synthetic_turf_cozy_cafe_interior_mo.jpg";
+import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.jpg";
+import tennisCourt from "../../Images/professional_hardcourt_tennis_court_at_twili.jpg";
+import padelCourt from "../../Images/modern_panoramic_padel_tennis_court_at_eveni.jpg";
 import type { PlaceSubType } from "../../../BackEndIntegration/Types/Enums/AppEnums";
 
 
 const imageFallbackMap: Record<PlaceSubType, string> = {
-  Cafe: cafe,
-  Billiard: Billiard,
-  Tennis: tennis,
-  FiveASide: pitchImage, 
-  SixASide: pitchImage,
-  Padel: pitchImage,      
+  Cafe: sportsCafe,
+  Billiard: billiardLounge,
+  Tennis: tennisCourt,
+  FiveASide: soccerField, 
+  SixASide: soccerField,
+  Padel: padelCourt,      
 };
 
 interface PlaceSearchDto {
@@ -23,7 +24,7 @@ interface PlaceSearchDto {
 export function Image({ item }: { item: PlaceSearchDto }) {
   const hasValidApiImage = item.mainImage && item.mainImage !== "N/A" && item.mainImage.trim() !== "";
   
-  const fallbackImage = imageFallbackMap[item.placeSubType] || pitchImage;
+  const fallbackImage = imageFallbackMap[item.placeSubType] || soccerField;
   
   const imageSrc = hasValidApiImage ? item.mainImage! : fallbackImage;
     

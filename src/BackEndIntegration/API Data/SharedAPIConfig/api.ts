@@ -10,7 +10,6 @@ const apiClient = axios.create({
   withCredentials: true, 
 });
 
-// 1. Request Interceptor
 apiClient.interceptors.request.use(
   (config) => {
     return config;
@@ -18,7 +17,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 2. Response Interceptor
 apiClient.interceptors.response.use(
   (response) => {
     return response.data; 
@@ -50,7 +48,7 @@ apiClient.interceptors.response.use(
     }
 
     const customError: FailResult = {
-      error: error.response?.data?.error || "حدث خطأ غير متوقع أثناء الاتصال بالخادم",
+      code: error.response?.data?.code||"GENERAL_ERROR",
     };
 
     return Promise.reject(customError);

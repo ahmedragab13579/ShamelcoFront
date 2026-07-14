@@ -11,12 +11,15 @@ import asGUID from "../../Types/shared/Guid";
 import { venueKeys } from "../Keys/useVenueKeys";
 import { NotificationKeys } from "../Keys/useNotificationKeys";
 import { useAuth } from "../../../Context/Auth/AuthContext";
+import { useLanguage } from "../../../UserInterFace/Hooks/Shared/useLanguage";
+import { getLocalizedMessage } from "../../../locales/i18nHelper";
 
 
 
 export const useSubmitReviewMutation = () => {
   const queryClient = useQueryClient();
   const{user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<GUID>, FailResult, SubmitReviewCommand>({
     mutationKey: [...reviewKeys.all, "submit"], 
@@ -30,10 +33,10 @@ export const useSubmitReviewMutation = () => {
         queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
       }
 
-      toast.success("تم إضافة التقييم بنجاح!");
+      toast.success(t('messages.REVIEW_SUBMITTED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error("حدث خطأ أثناء إضافة التقييم:"+ error.error);
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };

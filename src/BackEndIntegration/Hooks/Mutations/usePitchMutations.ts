@@ -10,10 +10,13 @@ import { dashboardKeys } from "../Keys/useDashboardKeys";
 import { NotificationKeys } from "../Keys/useNotificationKeys";
 import { useAuth } from "../../../Context/Auth/AuthContext";
 import asGUID from "../../Types/shared/Guid";
+import { useLanguage } from "../../../UserInterFace/Hooks/Shared/useLanguage";
+import { getLocalizedMessage } from "../../../locales/i18nHelper";
 
 export const useAddPitchMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
   return useMutation<SuccessResult<GUID>, FailResult, AddPitchCommand>({
     mutationKey: [...pitchKeys.all, "add"], 
     mutationFn: PitchApi.AddPitch,
@@ -23,17 +26,18 @@ export const useAddPitchMutation = () => {
       queryClient.invalidateQueries({ queryKey: dashboardKeys.pitches() });
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تمت إضافة الملعب بنجاح!");
+      toast.success(t('messages.PITCH_ADDED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إضافة الملعب، يرجى التأكد من البيانات.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useBlockPitchMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, BlockPitchCommand>({
     mutationKey: [...pitchKeys.all, "block"],
@@ -45,17 +49,18 @@ export const useBlockPitchMutation = () => {
       queryClient.invalidateQueries({ queryKey: dashboardKeys.pitchDetails(variables.pitchId) });
             queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تم حجب الملعب بنجاح!");
+      toast.success(t('messages.PITCH_BLOCKED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء حجب الملعب، يرجى المحاولة مرة أخرى.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useUpdatePitchMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, UpdatePitchCommand>({
     mutationKey: [...pitchKeys.all, "update"], 
@@ -67,10 +72,10 @@ export const useUpdatePitchMutation = () => {
       queryClient.invalidateQueries({ queryKey: dashboardKeys.pitchDetails(variables.id) });
             queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تم تعديل بيانات الملعب بنجاح!");
+      toast.success(t('messages.PITCH_UPDATED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء تعديل الملعب، يرجى المحاولة مرة أخرى.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };

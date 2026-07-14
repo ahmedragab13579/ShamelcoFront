@@ -16,9 +16,12 @@ import { dashboardKeys } from "../Keys/useDashboardKeys";
 import type { MutateBookingResponse } from "../../Types/Bookings/Response";
 import { venueKeys } from "../Keys/useVenueKeys";
 import { NotificationKeys } from "../Keys/useNotificationKeys";
+import { useLanguage } from "../../../UserInterFace/Hooks/Shared/useLanguage";
+import { getLocalizedMessage } from "../../../locales/i18nHelper";
 
 export const useCancelBookingMutation = () => {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   
   return useMutation<SuccessResult<MutateBookingResponse>, FailResult, GUID>({
     mutationKey: [...bookingKeys.all, "cancel"], 
@@ -31,16 +34,17 @@ export const useCancelBookingMutation = () => {
       queryClient.invalidateQueries({ queryKey: dashboardKeys.pitchDetails(response.data.targetId) });
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(response.data.userId) });
 
-      toast.success("تم إلغاء الحجز بنجاح");
+      toast.success(t('messages.BOOKING_CANCELLED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إلغاء الحجز، يرجى المحاولة مرة أخرى.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useRescheduleBookingMutation = () => {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   return useMutation<
     SuccessResult<MutateBookingResponse>, 
@@ -62,16 +66,17 @@ export const useRescheduleBookingMutation = () => {
           queryClient.invalidateQueries({ queryKey: venueKeys.availability(response.data.targetTableId) });
       }
       
-      toast.success("تمت إعادة جدولة الحجز بنجاح");
+      toast.success(t('messages.BOOKING_RESCHEDULED'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إعادة الجدولة، يرجى المحاولة مرة أخرى.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useCreatePitchBookingMutation = () => {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<MutateBookingResponse>, FailResult, CreatePitchBookingRequest>({
     mutationKey: [...bookingKeys.all, "createPitch"], 
@@ -83,16 +88,17 @@ export const useCreatePitchBookingMutation = () => {
       queryClient.invalidateQueries({ queryKey: pitchKeys.availability(variables.targetId) });
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(response.data.userId) });
 
-      toast.success("تم تأكيد حجز الملعب بنجاح");
+      toast.success(t('messages.BOOKING_CREATED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء حجز الملعب، يرجى التأكد من البيانات.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useCreateVenueBookingMutation = () => {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<MutateBookingResponse>, FailResult, CreateVenueBookingRequest>({
     mutationKey: [...bookingKeys.all, "createVenue"], 
@@ -104,10 +110,10 @@ export const useCreateVenueBookingMutation = () => {
       queryClient.invalidateQueries({ queryKey: venueKeys.availability(variables.targetTableId) });
             queryClient.invalidateQueries({ queryKey: NotificationKeys.list(response.data.userId) });
       
-      toast.success("تم تأكيد حجز المكان بنجاح");
+      toast.success(t('messages.BOOKING_CREATED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء حجز المكان، يرجى التأكد من البيانات.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };

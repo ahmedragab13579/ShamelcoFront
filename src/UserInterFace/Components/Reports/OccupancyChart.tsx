@@ -2,11 +2,13 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { format } from "date-fns";
 import { useGetOccupancy } from "../../../BackEndIntegration/Hooks/Queries/useReportsQueries";
 import type { BaseReportRequest } from "../../../BackEndIntegration/Types/Reports/Requests";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 export const OccupancyChart = ({ params }: { params: BaseReportRequest }) => {
   const { data, isLoading } = useGetOccupancy(params);
+  const { t } = useLanguage();
 
-  if (isLoading) return <div className="h-64 flex items-center justify-center text-shamelco-dark">جاري التحميل...</div>;
+  if (isLoading) return <div className="h-64 flex items-center justify-center text-shamelco-dark">{t('messages.LOADING_DATA_DOTS')}</div>;
   if (!data?.data) return null;
 
   const rawData = Array.isArray(data.data) ? data.data : [data.data];
@@ -18,7 +20,7 @@ export const OccupancyChart = ({ params }: { params: BaseReportRequest }) => {
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-shamelco-dark/10">
-      <h3 className="text-lg font-bold text-shamelco-darker mb-6">معدل الإشغال</h3>
+      <h3 className="text-lg font-bold text-shamelco-darker mb-6">{t('messages.OCCUPANCY_RATE')}</h3>
       <div className="h-64 w-full">
         <ResponsiveContainer>
           <BarChart data={chartData}>
@@ -45,7 +47,7 @@ export const OccupancyChart = ({ params }: { params: BaseReportRequest }) => {
               dataKey="bookingCount" 
               fill="#064663" // لون Accent الخاص بشاميلكو
               radius={[6, 6, 0, 0]} 
-              name="عدد الحجوزات" 
+              name={t('messages.NUMBER_OF_BOOKINGS')} 
               barSize={40}
             />
           </BarChart>

@@ -1,25 +1,27 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useGetPayments } from "../../../BackEndIntegration/Hooks/Queries/useReportsQueries";
 import type { BaseReportRequest } from "../../../BackEndIntegration/Types/Reports/Requests";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 // ألوان متناسقة مع هوية شاميلكو (بترولي، كحلي، وذهبي)
 const COLORS = ['#064663', '#112B3C', '#D4AF37']; 
 
 export const PaymentChart = ({ params }: { params: BaseReportRequest }) => {
   const { data, isLoading } = useGetPayments(params);
+  const { t } = useLanguage();
 
-  if (isLoading) return <div className="h-64 flex items-center justify-center text-shamelco-dark">جاري التحميل...</div>;
+  if (isLoading) return <div className="h-64 flex items-center justify-center text-shamelco-dark">{t('messages.LOADING_DATA_DOTS')}</div>;
   if (!data?.data) return null;
 
   const chartData = [
-    { name: 'كاش', value: data.data.cashTotal },
-    { name: 'إلكتروني', value: data.data.electronicTotal },
-    { name: 'آجل', value: data.data.deferredTotal },
+    { name: t('messages.CASH'), value: data.data.cashTotal },
+    { name: t('messages.ELECTRONIC'), value: data.data.electronicTotal },
+    { name: t('messages.DEFERRED'), value: data.data.deferredTotal },
   ];
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-shamelco-dark/10">
-      <h3 className="text-lg font-bold text-shamelco-darker mb-4">تفصيل المدفوعات</h3>
+      <h3 className="text-lg font-bold text-shamelco-darker mb-4">{t('messages.PAYMENT_BREAKDOWN')}</h3>
       <div className="h-64 w-full">
         <ResponsiveContainer>
           <PieChart>

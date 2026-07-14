@@ -1,14 +1,17 @@
-// src/UserInterFace/Pages/Common/SuccessPage.jsx
 import { useLocation, useNavigate } from "react-router-dom";
+import successIllust from "../../Images/bookingsuccessmodal.png";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
+
 export default function SuccessPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const { 
-    title = "تمت العملية بنجاح!", 
-    message = "شكراً لثقتكم بنا، تم تنفيذ طلبكم كما هو مطلوب.", 
+    title = t('messages.DEFAULT_SUCCESS_TITLE'), 
+    message = t('messages.DEFAULT_SUCCESS_MESSAGE'), 
     redirectUrl = "/home", 
-    buttonText = "العودة للرئيسية" 
+    buttonText = t('messages.BACK_TO_HOME') 
   } = location.state || {};
 
   const handleAction = () => {
@@ -27,26 +30,13 @@ export default function SuccessPage() {
       {/* الكارت المركزي */}
       <div className="bg-shamelco-bg p-8 md:p-12 rounded-3xl shadow-2xl shadow-shamelco-dark/5 max-w-lg w-full text-center border border-shamelco-dark/5 flex flex-col items-center">
         
-        {/* حاوية الأيقونة مع حركة نبض خفيفة */}
-        <div className="relative mb-8 flex items-center justify-center">
-          {/* حلقة خلفية متحركة */}
-          <span className="animate-ping absolute inline-flex h-20 w-20 rounded-full bg-status-success/20 opacity-75"></span>
-          {/* دائرة الأيقونة الأساسية باللون الأخضر */}
-          <div className="relative rounded-full bg-status-success p-4 border-4 border-white shadow-lg">
-            <svg 
-              className="w-12 h-12 text-white" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth="2.5" 
-                d="M5 13l4 4L19 7"
-              ></path>
-            </svg>
-          </div>
+        {/* حاوية الرسمة التوضيحية لنجاح العملية */}
+        <div className="relative mb-6 flex items-center justify-center w-48 h-48">
+          <img 
+            src={successIllust} 
+            alt={title} 
+            className="w-full h-full object-contain transform hover:scale-105 transition-transform duration-500" 
+          />
         </div>
 
         {/* النص باللون الكحلي الغامق جداً (--color-shamelco-darker) */}

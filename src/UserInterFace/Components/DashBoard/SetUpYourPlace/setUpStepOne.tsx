@@ -1,6 +1,9 @@
 import React from "react";
-import { Trophy, Gamepad2 } from "lucide-react"; // استخدام نفس الأيقونات المعتمدة في النظام
+import { Trophy, Gamepad2 } from "lucide-react"; 
 import type { PlaceType } from "../../../../BackEndIntegration/Types/Enums/AppEnums";
+import setupPitchIllust from "../../../Images/futuristic_illustration_representing_sports_manag.jpg";
+import setupVenueIllust from "../../../Images/futuristic_illustration_representing_entertainmen.jpg";
+import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
 interface SetupStepOneProps {
   businessType: PlaceType;
@@ -19,34 +22,52 @@ const BusinessTypeCard = ({
   type: PlaceType, 
   currentType: PlaceType, 
   onClick: () => void, 
-  icon: React.ReactNode, // تغيير النوع ليقبل أيقونات Lucide
+  icon: React.ReactNode, 
   title: string, 
   description: string 
 }) => {
   const isSelected = currentType === type;
+  const illustImage = type === "Pitch" ? setupPitchIllust : setupVenueIllust;
   
   return (
     <button
       onClick={onClick}
-      // الكارت العادي بياخد بوردر خفيف، ولما يتحدد بياخد أغمق لون عشان يبان إنه الـ Active
-      className={`relative overflow-hidden group p-8 rounded-2xl text-right transition-all duration-300 border-2 ${
+      className={`relative overflow-hidden group rounded-lg text-start transition-all duration-300 border-2 flex flex-col justify-between h-full active:scale-[0.99] cursor-pointer focus-visible:outline-shamelco-gold ${
         isSelected
-          ? "border-shamelco-darker bg-shamelco-dark/5 shadow-md scale-[1.02]"
-          : "border-shamelco-dark/10 bg-white hover:border-shamelco-accent/40 hover:bg-shamelco-dark/5"
+          ? "border-shamelco-gold bg-shamelco-gold-soft shadow-md rtl:-translate-y-1 ltr:-translate-y-1"
+          : "border-shamelco-border bg-shamelco-surface hover:border-shamelco-gold/50 hover:shadow-sm"
       }`}
     >
-      {/* الأيقونة بتاخد اللون الدهبي لو الكارت متحدد، وبترولي لو مش متحدد */}
-      <div className={`mb-4 transition-transform duration-300 group-hover:scale-110 ${
-        isSelected ? "text-shamelco-gold" : "text-shamelco-accent"
-      }`}>
-        {icon}
+      {/* صورة كرت توضيحية فخمة */}
+      <div className="relative w-full h-36 overflow-hidden bg-shamelco-sand border-b border-shamelco-border shrink-0">
+        <img 
+          src={illustImage} 
+          alt={title} 
+          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        />
+        
+        {/* أيقونة lucide كبادج عائم - متوافقة 100% مع الفاتح والغامق */}
+        <div className={`absolute bottom-3 end-3 p-2.5 rounded-md backdrop-blur-md shadow-sm transition-all duration-300 border ${
+          isSelected 
+            ? "bg-shamelco-gold text-shamelco-darker border-shamelco-gold shadow-gold scale-110" 
+            : "bg-shamelco-surface/90 text-shamelco-accent border-shamelco-border group-hover:text-shamelco-gold group-hover:border-shamelco-gold/50"
+        }`}>
+          {icon}
+        </div>
       </div>
-      <h3 className="text-xl font-bold mb-1 text-shamelco-darker">
-        {title}
-      </h3>
-      <p className="text-shamelco-dark/70 text-sm leading-relaxed font-medium">
-        {description}
-      </p>
+
+      <div className="p-6 flex-1 flex flex-col justify-between">
+        <div>
+          <h3 className={`text-xl font-black mb-2 transition-colors duration-200 ${
+            isSelected ? "text-shamelco-darker" : "text-shamelco-darker group-hover:text-shamelco-gold"
+          }`}>
+            {title}
+          </h3>
+          <p className="text-shamelco-muted text-sm leading-relaxed font-semibold">
+            {description}
+          </p>
+        </div>
+      </div>
     </button>
   );
 };
@@ -56,6 +77,8 @@ export default function SetupStepOne({
   setBusinessType,
   onNext,
 }: SetupStepOneProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -63,30 +86,28 @@ export default function SetupStepOne({
           type="Pitch"
           currentType={businessType}
           onClick={() => setBusinessType("Pitch")}
-          // تمرير أيقونة الملعب بحجم مناسب وسمك رفيع للشياكة
-          icon={<Trophy className="w-12 h-12" strokeWidth={1.5} />}
-          title="إدارة ملعب"
-          description="ملاعب كرة قدم، خماسي، سداسي، أو أي رياضات أخرى تعتمد على الحجز بالساعة."
+          icon={<Trophy className="w-6 h-6" strokeWidth={2} />}
+          title={t('messages.MANAGE_PITCH')}
+          description={t('messages.MANAGE_PITCH_DESC')}
         />
         <BusinessTypeCard 
           type="Venue"
           currentType={businessType}
           onClick={() => setBusinessType("Venue")}
-          // تمرير أيقونة الصالة
-          icon={<Gamepad2 className="w-12 h-12" strokeWidth={1.5} />}
-          title="إدارة صالة / كافيه"
-          description="صالات بلياردو، بلايستيشن، كافيهات، أو أماكن تعتمد على الطاولات والجلسات المفتوحة."
+          icon={<Gamepad2 className="w-6 h-6" strokeWidth={2} />}
+          title={t('messages.MANAGE_LOUNGE')}
+          description={t('messages.MANAGE_LOUNGE_DESC')}
         />
       </div>
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-end pt-4 border-t border-shamelco-border">
+        {/* تعديل زرار الأكشن ليكون هو العنصر الذهبي المميز في الشاشة (Primary CTA) */}
         <button
           onClick={onNext}
           disabled={!businessType}
-          // زرار الأكشن الأساسي: كحلي غامق مع نص دهبي، وتأثير ضغطة (active:scale-95)
-          className="px-10 py-3.5 rounded-xl font-bold text-shamelco-gold bg-shamelco-darker hover:bg-shamelco-dark focus:ring-4 focus:ring-shamelco-darker/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-95"
+          className="px-10 py-3.5 rounded-md font-black text-shamelco-darker bg-shamelco-gold hover:bg-shamelco-gold-hover focus-visible:outline-shamelco-gold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-shamelco-gold shadow-gold active:scale-[0.98] cursor-pointer shrink-0"
         >
-          الخطوة التالية
+          {t('messages.NEXT_STEP')}
         </button>
       </div>
     </div>

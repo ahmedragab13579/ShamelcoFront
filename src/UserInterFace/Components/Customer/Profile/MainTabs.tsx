@@ -1,17 +1,19 @@
 import { User, Trophy, Gamepad2 } from "lucide-react";
 import type { TabType } from "../../../Hooks/Customer/useProfile";
+import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
 export default function MainTabs({ activeTab, setActiveTab }: { activeTab: TabType; setActiveTab: (id: TabType) => void }) {
-  // ضفنا الأيقونات كـ Reference جوه الـ Array بدل الإيموجيز
+  const { t } = useLanguage();
+
   const tabs = [
-    { id: "info", label: "حسابي", icon: User },
-    { id: "pitches", label: "ملاعب", icon: Trophy },
-    { id: "venues", label: "صالات", icon: Gamepad2 },
+    { id: "info", label: t('messages.MY_ACCOUNT'), icon: User },
+    { id: "pitches", label: t('messages.PITCHES'), icon: Trophy },
+    { id: "venues", label: t('messages.VENUES'), icon: Gamepad2 },
   ] as const;
 
   return (
     // البوردر الخارجي أخد درجة خفيفة من اللون الغامق بدل slate-100
-    <div className="flex bg-white p-1.5 rounded-2xl shadow-sm border border-shamelco-dark/10 mb-6 sticky top-4 z-30">
+    <div className="flex bg-shamelco-surface p-1.5 rounded-2xl shadow-sm border border-shamelco-dark/10 mb-6 sticky top-4 z-30">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;

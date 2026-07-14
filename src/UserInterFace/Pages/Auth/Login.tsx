@@ -5,17 +5,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthRedirect } from "../../Hooks/Auth/useAuthRedirect";
 import { SharedInput } from "../../Components/Common/SharedInput";
 import { useLoginMutation } from "../../../BackEndIntegration/Hooks/Mutations/useAuthMutations";
+import { Loader2 } from "lucide-react";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
+import { getLocalizedMessage } from "../../../locales/i18nHelper";
+import type FailResult from "../../../BackEndIntegration/Types/Result/Fail";
+// 1. استدعاء الدالة المساعدة لترجمة أكواد الباك إند
 
 export default function Login() {
-     useAuthRedirect();
-
-  const loginMutation  = useLoginMutation();
-
+  useAuthRedirect();
+  const loginMutation = useLoginMutation();
+  const { t } = useLanguage();
 
   const onSubmit = (data: loginFormInput) => {
     loginMutation.mutate(data);
   };
-
 
   const {
     register,
@@ -25,24 +28,35 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
+  // 2. استخلاص رسالة الخطأ الحقيقية من الباك إند وترجمتها
+  const errorMessage = loginMutation.isError 
+    ? getLocalizedMessage(
+        (loginMutation.error as FailResult)?.code || "INVALID_CREDENTIALS_LOGIN"
+      )
+    : null;
+
   return (
-    <div className="w-full">
-      <div className="mb-8 text-center lg:text-right">
-        <h3 className="text-2xl font-bold text-shamelco-darker mb-2">تسجيل الدخول</h3>
-        <p className="text-shamelco-dark/60 text-sm">
-          مرحباً بك مجدداً في عائلة شاميلكو
+    <div className="w-full font-sans">
+      {/* تم إضافة dir="auto" لحماية نصوص الترحيب */}
+      <div dir="auto" className="mb-8 text-center lg:text-start">
+        <h3 className="text-2xl font-black text-shamelco-darker mb-2 tracking-tight">
+          {t('messages.LOGIN')}
+        </h3>
+        <p className="text-shamelco-muted text-sm font-medium">
+          {t('messages.WELCOME_BACK_FAMILY')}
         </p>
       </div>
 
-      {loginMutation.isError && (
-        <div className="mb-4 p-3 bg-status-danger/10 border border-status-danger/20 rounded-xl text-sm text-status-danger text-center">
-          البريد الإلكتروني أو كلمة المرور غير صحيحة.
+      {/* 3. عرض رسالة الخطأ المترجمة بناءً على الرد الفعلي من الباك إند */}
+      {errorMessage && (
+        <div className="mb-4 p-3 bg-status-danger/10 border border-status-danger/20 rounded-xl text-sm font-bold text-status-danger text-center animate-in fade-in zoom-in-95">
+          {errorMessage}
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <SharedInput
-          label="البريد الإلكتروني"
+          label={t('messages.EMAIL_LABEL')}
           type="Email"
           placeholder="name@example.com"
           required
@@ -52,19 +66,19 @@ export default function Login() {
 
         <div>
           <SharedInput
-            label="كلمة المرور"
+            label={t('messages.PASSWORD_LABEL')}
             type="Password"
             placeholder="••••••••"
             required
             {...register("Password")}
             error={errors.Password?.message}
           />
-          <div className="text-left mt-1.5">
+          <div className="text-end mt-1.5">
             <Link
               to="/auth/forget-password"
-              className="text-xs text-shamelco-dark/60 hover:text-shamelco-accent transition-colors"
+              className="text-xs text-shamelco-muted hover:text-shamelco-accent transition-colors font-semibold"
             >
-              نسيت كلمة المرور؟
+              {t('messages.FORGOT_PASSWORD_Q')}
             </Link>
           </div>
         </div>
@@ -72,19 +86,26 @@ export default function Login() {
         <button
           type="submit"
           disabled={loginMutation.isPending}
-          className="w-full py-3 px-4 rounded-xl font-bold text-white bg-shamelco-darker hover:bg-shamelco-dark focus:ring-4 focus:ring-shamelco-darker/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+          className="w-full py-3.5 px-4 rounded-xl font-black text-shamelco-darker bg-shamelco-gold hover:bg-shamelco-gold-hover transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] mt-4"
         >
-          {loginMutation.isPending ? "جاري التحميل..." : "تسجيل الدخول"}
+          {loginMutation.isPending ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+              <span>{t('messages.LOADING_DOTS')}</span>
+            </>
+          ) : (
+            <span>{t('messages.LOGIN')}</span>
+          )}
         </button>
       </form>
 
-      <p className="text-center text-sm text-shamelco-dark/70 mt-8">
-        ليس لديك حساب؟{" "}
+      <p className="text-center text-sm text-shamelco-muted mt-8 font-medium">
+        {t('messages.DONT_HAVE_ACCOUNT')}{" "}
         <Link
           to="/auth/register"
-          className="font-semibold text-shamelco-accent hover:text-shamelco-dark underline underline-offset-4 transition-colors"
+          className="font-bold text-shamelco-accent hover:text-shamelco-darker underline underline-offset-4 transition-colors"
         >
-          أنشئ حسابك الآن
+          {t('messages.CREATE_ACCOUNT_NOW')}
         </Link>
       </p>
     </div>
