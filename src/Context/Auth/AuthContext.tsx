@@ -13,6 +13,7 @@ import type {
 } from "../../BackEndIntegration/Types/Auth/Context";
 import apiClient from "../../BackEndIntegration/API Data/SharedAPIConfig/api";
 import toast from 'react-hot-toast';
+import { useLanguage } from "../../UserInterFace/Hooks/Shared/useLanguage";
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const normalizeUserData = (rawData: Record<string, unknown>): DecodedUser => {
@@ -30,7 +31,7 @@ const normalizeUserData = (rawData: Record<string, unknown>): DecodedUser => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<DecodedUser | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
-
+  const{t} = useLanguage();
   const isAuthenticated: boolean = user?.isAuthenticated === true;
 
   const loginState = useCallback((userData: DecodedUser) => {
@@ -51,13 +52,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(normalizeUserData(actualUserData as Record<string, unknown>));
      } catch (error: any) {
         const statusCode = error.response?.status;
-        if (statusCode !== 401) {
-          toast.error("حدث خطأ في الاتصال بالخادم، يرجى المحاولة لاحقاً.");
+        if (statusCode === 401 || statusCode === 403) {
+          toast.error(t('messages.SERVER_ERROR'));
         } 
-        else if (statusCode === 403) {
-           toast.error("انتهت صلاحية الجلسة، برجاء تسجيل الدخول مرة أخرى.");
-        }
-
+     
         console.log("No valid session found on load.", error);
         setUser(null); 
       } finally {

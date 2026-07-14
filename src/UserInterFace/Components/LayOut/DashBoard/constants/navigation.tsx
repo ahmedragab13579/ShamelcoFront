@@ -2,11 +2,11 @@
 import { DashboardHomeIcon, ReportsIcon, SettingsIcon } from "../../../Icons/Icons";
 
 export const getDashboardNavItems = (homePath: string) => [
-  { name: "الرئيسية", path: homePath, icon: <DashboardHomeIcon /> },
-  { name: "التقارير", path: `${homePath}/reports`, icon: <ReportsIcon /> },
-  { name: "الإعدادات", path: `${homePath}/settings`, icon: <SettingsIcon /> },
-  { name:"الحساب", path: `profile`, icon: <SettingsIcon /> },
-    { name:"المزيد من العمليات", path: `${homePath}/more-actions`, icon: <SettingsIcon /> },
+  { name: "HOME", path: homePath, icon: <DashboardHomeIcon /> },
+  { name: "REPORTS", path: `${homePath}/reports`, icon: <ReportsIcon /> },
+  { name: "SETTINGS", path: `${homePath}/settings`, icon: <SettingsIcon /> },
+  { name:"PROFILE", path: `profile`, icon: <SettingsIcon /> },
+  { name:"MORE_ACTION", path: `${homePath}/more-actions`, icon: <SettingsIcon /> },
 
 
 ];

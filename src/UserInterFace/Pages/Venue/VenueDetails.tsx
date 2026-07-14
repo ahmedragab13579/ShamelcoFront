@@ -1,22 +1,22 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetVenue } from "../../../BackEndIntegration/Hooks/Queries/useVenueQueries";
 import asGUID from "../../../BackEndIntegration/Types/shared/Guid";
-import Loading from "../../Components/Common/Loading";
 import Error from "../../Components/Common/Error";
 import type { VenueDto } from "../../../BackEndIntegration/Types/Venues/Response";
-import Cafe from "../../Images/Cafe.jpg";
-import Billiard from "../../Images/Billiard.jpg";
+import sportsCafe from "../../Images/premium_synthetic_turf_cozy_cafe_interior_mo.jpg";
+import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.jpg";
 import type { VenueType } from "../../../BackEndIntegration/Types/Enums/AppEnums";
+import { Star, MapPin, Grid, ChevronLeft } from "lucide-react";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 const VenueHero = ({ mainImage, name, rating, type }: { mainImage: string, name: string, rating: number, type: VenueType }) => {
-  const navigate = useNavigate();
-  
+  const navigate = useNavigate();  
   const hasValidApiImage = mainImage && mainImage !== "N/A" && mainImage.trim() !== "";
   
-  let fallbackImage = Billiard; 
+  let fallbackImage = billiardLounge; 
   if (type) {
-    if (type==="Cafe") fallbackImage = Cafe;
-    else if (type==="Billiard") fallbackImage = Billiard;
+    if (type==="Cafe") fallbackImage = sportsCafe;
+    else if (type==="Billiard") fallbackImage = billiardLounge;
   }
 
   const imageSrc = hasValidApiImage ? mainImage : fallbackImage;
@@ -34,99 +34,99 @@ const VenueHero = ({ mainImage, name, rating, type }: { mainImage: string, name:
       
       <button 
         onClick={() => navigate(-1)} 
-        className="absolute top-4 right-4 bg-white/20 backdrop-blur-md p-2 rounded-full text-white hover:bg-white/40 transition-colors"
+        className="absolute top-4 start-4 bg-white/20 backdrop-blur-md p-2.5 rounded-full text-white hover:bg-white/40 transition-colors cursor-pointer flex items-center justify-center"
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
+        <ChevronLeft className="w-6 h-6 rtl:rotate-180" />
       </button>
       
-      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-1.5">
+      <div className="absolute bottom-4 start-4 bg-white/90 backdrop-blur-sm px-3.5 py-1.8 rounded-xl shadow-lg flex items-center gap-1.5 border border-shamelco-border">
         <span className="text-sm font-black text-shamelco-darker">{rating}</span>
-        <svg className="w-4 h-4 text-shamelco-gold" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
+        <Star className="w-4 h-4 text-shamelco-gold fill-current" />
       </div>
     </div>
   );
 };
 
-const VenueMainInfo = ({ name, type, address, activeTablesNumber }: { name: string, type: VenueType, address: string, activeTablesNumber: number }) => (
-  <div className="bg-white rounded-2xl shadow-sm border border-shamelco-dark/5 p-5 md:p-6 mb-4">
-    <div className="flex justify-between items-start mb-2">
-      <span className="inline-block px-3 py-1 bg-status-success/10 text-status-success text-xs font-bold rounded-lg">
-        {type}
-      </span>
-      <span className="inline-flex items-center gap-1 px-3 py-1 bg-shamelco-bg text-shamelco-dark text-xs font-bold rounded-lg border border-shamelco-dark/5">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg>
-        {activeTablesNumber} طاولات
-      </span>
-    </div>
-    
-    <h1 className="text-2xl font-black text-shamelco-darker leading-tight mb-3">
-      {name}
-    </h1>
-    
-    <div className="flex items-center gap-2 text-shamelco-dark/60 text-sm">
-      <svg className="w-5 h-5 text-status-success shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      <span>{address}</span>
-    </div>
-  </div>
-);
+const VenueMainInfo = ({ name, type, address, activeTablesNumber }: { name: string, type: VenueType, address: string, activeTablesNumber: number }) => {
+  const { t } = useLanguage();
 
-const VenueStatusCard = ({ isOpen, isActive, openIn, closeIn }: { isOpen: boolean, isActive: boolean, openIn: string, closeIn: string }) => (
-  <div className="bg-white rounded-2xl shadow-sm border border-shamelco-dark/5 p-5 md:p-6">
-    <h3 className="text-lg font-bold text-shamelco-darker mb-4">حالة ومواعيد العمل 🕒</h3>
-    
-    <div className="grid grid-cols-2 gap-4 mb-4">
-      <div className={`flex flex-col items-center justify-center p-3 rounded-xl border ${isOpen ? 'bg-status-success/10 border-status-success/25 text-status-success' : 'bg-status-danger/10 border-status-danger/25 text-status-danger'}`}>
-        <span className="text-xs font-bold mb-1">الحالة الآن</span>
-        <span className="text-lg font-black">{isOpen ? 'مفتوح 🟢' : 'مغلق 🔴'}</span>
+  return (
+    <div className="bg-shamelco-surface rounded-3xl shadow-sm border border-shamelco-border p-5 md:p-8 mb-4">
+      <div className="flex justify-between items-start mb-2.5">
+        <span className="inline-block px-3 py-1 bg-status-success/15 text-status-success text-xs font-bold rounded-lg border border-status-success/20">
+          {type}
+        </span>
+        <span className="inline-flex items-center gap-1 px-3 py-1 bg-shamelco-bg text-shamelco-dark text-xs font-bold rounded-lg border border-shamelco-border">
+          <Grid className="w-3.5 h-3.5 text-shamelco-accent" />
+          <span>{activeTablesNumber} {t('messages.TABLES')}</span>
+        </span>
       </div>
- 
-      <div className={`flex flex-col items-center justify-center p-3 rounded-xl border ${isActive ? 'bg-shamelco-accent/10 border-shamelco-accent/25 text-shamelco-accent' : 'bg-shamelco-bg border-shamelco-dark/15 text-shamelco-dark/60'}`}>
-        <span className="text-xs font-bold mb-1">الحجز عبر التطبيق</span>
-        <span className="text-lg font-black">{isActive ? 'متاح ✅' : 'متوقف ❌'}</span>
+      
+      <h1 className="text-2xl font-black text-shamelco-darker leading-tight mb-3">
+        {name}
+      </h1>
+      
+      <div className="flex items-center gap-2 text-shamelco-dark/70 text-sm mt-3">
+        <MapPin className="w-5 h-5 text-status-success shrink-0" />
+        <span className="font-semibold">{address}</span>
       </div>
     </div>
+  );
+};
 
-    <div className="bg-shamelco-bg rounded-xl p-4 flex items-center justify-between border border-shamelco-dark/5">
-      <div className="text-center">
-        <span className="block text-xs text-shamelco-dark/60 mb-1">يفتح الساعة</span>
-        <span className="font-bold text-shamelco-darker dir-ltr inline-block">{openIn}</span>
+const VenueStatusCard = ({ isOpen, isActive, openIn, closeIn }: { isOpen: boolean, isActive: boolean, openIn: string, closeIn: string }) => {
+  const { t } = useLanguage();
+
+  return (
+    <div className="bg-shamelco-surface rounded-3xl shadow-sm border border-shamelco-border p-5 md:p-8">
+      <h3 className="text-lg font-black text-shamelco-darker mb-4">{t('messages.VENUE_STATUS_HOURS')} 🕒</h3>
+      
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className={`flex flex-col items-center justify-center p-4 rounded-2xl border ${isOpen ? 'bg-status-success/10 border-status-success/20 text-status-success' : 'bg-status-danger/10 border-status-danger/20 text-status-danger'}`}>
+          <span className="text-xs font-bold mb-1 opacity-70">{t('messages.STATUS_NOW')}</span>
+          <span className="text-base font-black">{isOpen ? t('messages.OPEN_NOW') : t('messages.CLOSED_NOW')}</span>
+        </div>
+   
+        <div className={`flex flex-col items-center justify-center p-4 rounded-2xl border ${isActive ? 'bg-shamelco-accent/10 border-shamelco-accent/20 text-shamelco-accent' : 'bg-shamelco-bg border-shamelco-border text-shamelco-dark/60'}`}>
+          <span className="text-xs font-bold mb-1 opacity-70">{t('messages.APP_BOOKING')}</span>
+          <span className="text-base font-black">{isActive ? `${t('messages.AVAILABLE')} ✅` : `${t('messages.DISABLED')} ❌`}</span>
+        </div>
       </div>
-      <div className="w-px h-8 bg-shamelco-dark/10"></div>
-      <div className="text-center">
-        <span className="block text-xs text-shamelco-dark/60 mb-1">يغلق الساعة</span>
-        <span className="font-bold text-shamelco-darker dir-ltr inline-block">{closeIn}</span>
+
+      <div className="bg-shamelco-bg rounded-2xl p-4 flex items-center justify-between border border-shamelco-border">
+        <div className="text-center w-1/2">
+          <span className="block text-xs text-shamelco-dark/60 mb-1 font-bold">{t('messages.OPENS_AT')}</span>
+          <span className="font-black text-shamelco-darker dir-ltr inline-block">{openIn}</span>
+        </div>
+        <div className="w-px h-8 bg-shamelco-border"></div>
+        <div className="text-center w-1/2">
+          <span className="block text-xs text-shamelco-dark/60 mb-1 font-bold">{t('messages.CLOSES_AT')}</span>
+          <span className="font-black text-shamelco-darker dir-ltr inline-block">{closeIn}</span>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default function VenueDetails() {
   const { id } = useParams();
   const nav = useNavigate();
+  const { t } = useLanguage();
   
   const result = useGetVenue(asGUID(id||"00000000-0000-0000-0000-000000000000"));
 
   if (result.isLoading) {
-      return <Loading text="جارى جلب البيانات" />;
-    }
+    return <VenueDetailsSkeleton />;
+  }
   
-    if (result.isError || !result.data) {
-      return <Error text="حدث خطأ فى جلب البيانات" />;
-    }
+  if (result.isError || !result.data) {
+    return <Error text={t('messages.ERROR_FETCHING_DATA')} />;
+  }
   
   const venue: VenueDto = result.data.data;
 
   return (
-    <div className="w-full bg-shamelco-bg min-h-screen pb-24 md:pb-8">
+    <div className="w-full bg-shamelco-bg min-h-screen pb-24 md:pb-8 font-sans animate-fade-in">
       
       <VenueHero 
         mainImage={venue.mainImage} 
@@ -135,7 +135,7 @@ export default function VenueDetails() {
         type={venue.type}
       />
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 space-y-4">
         
         <VenueMainInfo 
           name={venue.name} 
@@ -153,30 +153,65 @@ export default function VenueDetails() {
 
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-shamelco-dark/10 p-4 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.1)] z-50 md:sticky md:bottom-0 md:mt-8 md:max-w-3xl md:mx-auto md:rounded-t-2xl md:border-l md:border-r">
-        <div className="flex items-center justify-between max-w-3xl mx-auto">
+      <div className="fixed bottom-0 start-0 end-0 bg-shamelco-surface border-t border-shamelco-border p-4 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.08)] z-50 md:sticky md:bottom-4 md:mt-8 md:max-w-3xl md:mx-auto md:rounded-3xl md:border md:mb-6">
+        <div className="flex items-center justify-between max-w-3xl mx-auto px-2">
           <div className="flex flex-col">
-            <span className="text-xs font-bold text-shamelco-dark/60 mb-0.5">احجز جلستك الآن</span>
+            <span className="text-xs font-bold text-shamelco-muted mb-0.5">{t('messages.BOOK_YOUR_SESSION_NOW')}</span>
             {venue.isOpen ? (
               <span className="text-sm font-black text-status-success flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-status-success animate-pulse"></span>
-                متاح للحجز
+                {t('messages.AVAILABLE_FOR_BOOKING')}
               </span>
             ) : (
-              <span className="text-sm font-black text-status-danger">مغلق حالياً</span>
+              <span className="text-sm font-black text-status-danger">{t('messages.CLOSED_NOW')}</span>
             )}
           </div>
           
           <button 
             onClick={() => nav(`floor`)}
             disabled={!venue.isOpen || !venue.isActive}
-            className="bg-status-success hover:bg-status-success/90 disabled:bg-shamelco-dark/20 disabled:cursor-not-allowed text-white font-bold text-lg px-8 py-3 rounded-xl shadow-md transition-all active:scale-95"
+            className="bg-shamelco-gold hover:bg-shamelco-gold-hover disabled:bg-shamelco-bg disabled:text-shamelco-muted/50 disabled:cursor-not-allowed text-shamelco-darker font-black text-base px-8 py-3.5 rounded-xl shadow-xs transition-all active:scale-[0.98] cursor-pointer"
           >
-            {venue.isActive ? "بدء الحجز" : "الحجز متوقف"}
+            {venue.isActive ? t('messages.START_BOOKING') : t('messages.BOOKING_STOPPED')}
           </button>
         </div>
       </div>
 
+    </div>
+  );
+}
+
+function VenueDetailsSkeleton() {
+  return (
+    <div className="w-full bg-shamelco-bg min-h-screen pb-24 md:pb-8 font-sans animate-pulse">
+      {/* هيرو الغلاف */}
+      <div className="w-full h-64 md:h-80 bg-shamelco-sand relative" />
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 space-y-4">
+        {/* تفاصيل الهيكل */}
+        <div className="bg-shamelco-surface rounded-3xl border border-shamelco-border p-6 sm:p-8 space-y-4 shadow-2xs">
+          <div className="flex justify-between items-start">
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <div className="h-5 w-16 bg-shamelco-border/50 rounded-md" />
+                <div className="h-5 w-20 bg-shamelco-border/40 rounded-md" />
+              </div>
+              <div className="h-7 w-48 bg-shamelco-border rounded-md" />
+            </div>
+          </div>
+          <div className="h-4 w-60 bg-shamelco-border/60 rounded-md" />
+        </div>
+
+        {/* حالة ومواعيد الهيكل */}
+        <div className="bg-shamelco-surface rounded-3xl border border-shamelco-border p-6 sm:p-8 space-y-4 shadow-2xs">
+          <div className="h-5 w-32 bg-shamelco-border rounded-md" />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="h-16 bg-shamelco-sand rounded-2xl" />
+            <div className="h-16 bg-shamelco-sand rounded-2xl" />
+          </div>
+          <div className="h-16 bg-shamelco-sand rounded-2xl w-full" />
+        </div>
+      </div>
     </div>
   );
 }

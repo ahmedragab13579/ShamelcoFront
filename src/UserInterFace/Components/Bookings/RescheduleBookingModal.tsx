@@ -2,6 +2,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import type { GUID } from "../../../BackEndIntegration/Types/shared/Guid";
 import { SharedInput } from "../Common/SharedInput";
 import { useRescheduleBookingMutation } from "../../../BackEndIntegration/Hooks/Mutations/useBookingMutations";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 interface RescheduleBookingModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export default function RescheduleBookingModal({ isOpen, onClose, bookingId }: R
   } = useForm<RescheduleFormInputs>();
 
   const { mutate: rescheduleBooking, isPending } = useRescheduleBookingMutation();
+  const { t } = useLanguage();
 
   const startTime = watch("newStartTime");
 
@@ -55,47 +57,48 @@ export default function RescheduleBookingModal({ isOpen, onClose, bookingId }: R
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-        <h2 className="text-xl font-semibold mb-6 text-shamelco-darker text-right">إعادة جدولة الحجز</h2>
+        <h2 className="text-xl font-semibold mb-6 text-shamelco-darker text-start">{t('messages.RESCHEDULE_BOOKING')}</h2>
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           
           <SharedInput
-            label="وقت البداية الجديد"
+            label={t('messages.NEW_START_TIME')}
             type="datetime-local"
             error={errors.newStartTime?.message}
-            {...register("newStartTime", { required: "يرجى اختيار وقت البداية" })}
+            {...register("newStartTime", { required: t('messages.SELECT_START_TIME_REQ') })}
           />
 
           <SharedInput
-            label="وقت النهاية الجديد"
+            label={t('messages.NEW_END_TIME')}
             type="datetime-local"
             error={errors.newEndTime?.message}
             {...register("newEndTime", { 
-              required: "يرجى اختيار وقت النهاية",
+              required: t('messages.SELECT_END_TIME_REQ'),
               validate: (value) => {
                 if (startTime && new Date(value) <= new Date(startTime)) {
-                  return "وقت النهاية يجب أن يكون بعد وقت البداية";
+                  return t('messages.END_TIME_MUST_BE_AFTER_START');
                 }
                 return true;
               }
             })}
           />
 
-          <div className="flex justify-end gap-3 mt-8">
+          <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
               onClick={handleClose}
               disabled={isPending}
-              className="px-6 py-2 text-sm font-bold text-shamelco-darker bg-shamelco-dark/10 rounded-xl hover:bg-shamelco-dark/20 disabled:opacity-50 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-shamelco-dark bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
-              إلغاء
+              {t('messages.CANCEL')}
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-6 py-2 text-sm font-bold text-white bg-shamelco-accent rounded-xl hover:opacity-90 disabled:opacity-50 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-white bg-shamelco-darker rounded-xl hover:bg-shamelco-accent disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-1.5"
             >
-              {isPending ? "جاري الحفظ..." : "تأكيد التعديل"}
+              {isPending && <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>}
+              {t('messages.CONFIRM_RESCHEDULING')}
             </button>
           </div>
         </form>

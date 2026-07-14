@@ -4,7 +4,7 @@ import { useMarkAsReadNotificationMutation } from "../../../BackEndIntegration/H
 
 interface NotificationBubbleProps {
   notification: NotificationDto;
-  onClick?: () => void;
+  onClick?: (notification: NotificationDto) => void;
 }
 
 export default function NotificationBubble({ notification, onClick }: NotificationBubbleProps) {
@@ -30,52 +30,60 @@ export default function NotificationBubble({ notification, onClick }: Notificati
   const handleBubbleClick = () => {
     handleMarkAsRead(); 
     if (onClick) {
-      onClick(); 
+      onClick(notification); 
     }
   };
 
   return (
     <div
       onClick={handleBubbleClick}
-      className={`p-4 border-b border-shamelco-dark/5 transition-all relative group cursor-pointer ${
+      className={`p-4 border-b border-shamelco-border transition-all duration-200 relative group cursor-pointer ${
         !notification.isRead
-          ? "bg-shamelco-accent/5 hover:bg-shamelco-accent/10"
-          : "hover:bg-shamelco-dark/5"
+          ? "bg-shamelco-sky-soft hover:bg-shamelco-accent/10 dark:hover:bg-shamelco-sky-soft/40"
+          : "bg-transparent hover:bg-shamelco-sand dark:hover:bg-shamelco-surface/60"
       }`}
     >
-      <div className="flex gap-3">
-        <div className="mt-1">
+      <div className="flex gap-3 items-start">
+        {/* مؤشر الحالة (Dot) */}
+        <div className="mt-1.5 shrink-0">
           {!notification.isRead ? (
-            <div className="w-2.5 h-2.5 bg-shamelco-accent rounded-full animate-pulse"></div>
+            <div className="w-2.5 h-2.5 bg-shamelco-gold rounded-full animate-pulse shadow-sm"></div>
           ) : (
-            <div className="w-2.5 h-2.5 bg-shamelco-dark/20 rounded-full"></div>
+            <div className="w-2.5 h-2.5 bg-shamelco-border rounded-full"></div>
           )}
         </div>
 
-        <div className="flex-1">
+        {/* محتوى الإشعار */}
+        <div className="flex-1 min-w-0">
           <p
-            className={`text-sm ${
-              !notification.isRead ? "font-bold text-shamelco-darker" : "font-medium text-shamelco-dark"
+            className={`text-sm leading-snug ${
+              !notification.isRead 
+                ? "font-bold text-shamelco-darker" 
+                : "font-medium text-shamelco-darker/80"
             }`}
           >
             {notification.title}
           </p>
-          <p className="text-xs text-shamelco-dark/70 mt-1 leading-relaxed">
+          
+          <p className="text-xs text-shamelco-muted mt-1 leading-relaxed line-clamp-2">
             {notification.message}
           </p>
-          <span className="text-[10px] text-shamelco-dark/50 mt-2 block font-medium">
+          
+          <span className="text-[10px] text-shamelco-muted/80 mt-2 block font-medium">
             {formatDate(notification.createdAt)}
           </span>
         </div>
 
+        {/* زر التحديد كمقروء */}
         {!notification.isRead && (
           <button
             onClick={handleMarkAsRead}
             disabled={isPending}
-            className="text-shamelco-dark/40 hover:text-shamelco-accent p-1 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50 h-fit"
+            type="button"
+            className="shrink-0 p-1.5 rounded-md text-shamelco-muted hover:text-shamelco-gold hover:bg-shamelco-gold-soft transition-all duration-150 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 disabled:opacity-50 cursor-pointer"
             title="تحديد كمقروء"
           >
-            <CheckCircle2 className="w-5 h-5" />
+            <CheckCircle2 className="w-4 h-4" />
           </button>
         )}
       </div>

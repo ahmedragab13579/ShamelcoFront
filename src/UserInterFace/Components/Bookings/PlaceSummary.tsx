@@ -1,42 +1,50 @@
 import { Gamepad2, Trophy, Banknote } from "lucide-react";
 import type { PlaceSearchDto } from "../../../BackEndIntegration/Types/Customer/Response";
 import { Image } from "../Common/Image";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
-export const PlaceSummary = ({ place, placeCategory }: { place: PlaceSearchDto, placeCategory: string }) => (
-  // ضفنا كلاس "group" هنا عشان أي hover على الكارت يشغل زووم الصورة
-  <div className="bg-white p-3 rounded-2xl border border-shamelco-dark/10 shadow-sm flex items-center gap-4 mb-6 transition-shadow hover:shadow-md group cursor-default">
-    
-    {/* هنا السر: عملنا حاوية ثابتة للصورة بمقاسات محددة عشان متبوظش التصميم */}
-    <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-shamelco-bg">
-      <Image item={place}/>
-    </div>
+export const PlaceSummary = ({ place, placeCategory }: { place: PlaceSearchDto, placeCategory: string }) => {
+  const { t } = useLanguage();
 
-    {/* حاوية النصوص خدت flex-1 عشان تاخد باقي المساحة بشكل مرتب */}
-    <div className="flex flex-col flex-1">
-      <span className="flex items-center gap-1.5 text-[10px] font-bold text-shamelco-accent bg-shamelco-accent/10 px-2 py-1 rounded-md mb-1.5 w-fit">
-        {placeCategory === "Pitch" ? (
-          <>
-            <Trophy className="w-3.5 h-3.5" />
-            ملعب رياضي
-          </>
-        ) : (
-          <>
-            <Gamepad2 className="w-3.5 h-3.5" />
-            صالة / كافيه
-          </>
-        )}
-      </span>
+  return (
+    <div className="bg-shamelco-surface p-4 rounded-lg border border-shamelco-border shadow-sm flex items-center gap-4 mb-6 transition-all duration-200">
       
-      {/* اسم المكان */}
-      <h2 className="font-bold text-shamelco-darker text-base sm:text-lg line-clamp-1">
-        {place?.name}
-      </h2>
-      
-      {/* السعر */}
-      <div className="flex items-center gap-1.5 text-sm font-black text-shamelco-dark mt-1">
-        <Banknote className="w-4 h-4 text-shamelco-gold" />
-        {place?.startingPrice} ج.م / الساعة
+      {/* حاوية الصورة ثابتة ومقصوصة بشكل احترافي */}
+      <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-md overflow-hidden bg-shamelco-bg border border-shamelco-border/50">
+        <Image item={place} />
+      </div>
+
+      {/* تفاصيل المكان */}
+      <div className="flex flex-col flex-1 gap-1">
+        <span className={`flex items-center gap-1.5 text-[10px] sm:text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-sm w-fit ${
+          placeCategory === "Pitch" 
+            ? "bg-shamelco-gold/20 text-shamelco-gold" 
+            : "bg-shamelco-border text-shamelco-darker"
+        }`}>
+          {placeCategory === "Pitch" ? (
+            <>
+              <Trophy className="w-3 h-3" />
+              {t('messages.SPORTS_PITCH')}
+            </>
+          ) : (
+            <>
+              <Gamepad2 className="w-3 h-3" />
+              {t('messages.LOUNGE_CAFE')}
+            </>
+          )}
+        </span>
+        
+        <h2 className="font-black text-shamelco-darker text-base sm:text-lg leading-tight line-clamp-1">
+          {place?.name}
+        </h2>
+        
+        <div className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-shamelco-muted">
+          <Banknote className="w-4 h-4 text-shamelco-gold" />
+          <span>
+            {place?.startingPrice} {t('messages.CURRENCY')} <span className="font-normal text-shamelco-muted/70">/ {t('messages.HOUR')}</span>
+          </span>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};

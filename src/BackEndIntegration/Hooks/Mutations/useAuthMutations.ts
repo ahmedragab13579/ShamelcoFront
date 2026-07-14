@@ -19,6 +19,8 @@ import { authKeys } from "../Keys/useAuthKeys";
 import { queryClient } from "../../config/queryClient";
 import { NotificationKeys } from "../Keys/useNotificationKeys";
 import asGUID from "../../Types/shared/Guid";
+import { useLanguage } from "../../../UserInterFace/Hooks/Shared/useLanguage";
+import { getLocalizedMessage } from "../../../locales/i18nHelper";
 
 const normalizeDecodedToken = (
   rawToken: Record<string, unknown>,
@@ -51,38 +53,42 @@ const useAuthSuccess = () => {
 
 export const useLoginMutation = () => {
   const handleSuccess = useAuthSuccess();
+  const{t} = useLanguage();
 
   return useMutation<SuccessResult<AuthTokensResponse>, FailResult, LocalLoginRequest>({
     mutationKey: authKeys.action("login"),
     mutationFn: AuthApi.login,
     onSuccess: (data) => {
       handleSuccess(data);
-      toast.success("تم تسجيل الدخول بنجاح، أهلاً بك في شاميلكو!");
+      toast.success(t('messages.LOGIN_SUCCESSFUL'));
     },
     onError: (error) => {
-      toast.error(error?.error || "بيانات الدخول غير صحيحة، يرجى المحاولة مرة أخرى.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useGoogleLoginMutation = () => {
   const handleSuccess = useAuthSuccess();
+  const{t} = useLanguage();
 
   return useMutation<SuccessResult<AuthTokensResponse>, FailResult, GoogleLoginRequest>({
     mutationKey: authKeys.action("googleLogin"),
     mutationFn: AuthApi.loginWithGoogle,
     onSuccess: (data) => {
       handleSuccess(data);
-      toast.success("تم تسجيل الدخول بواسطة جوجل بنجاح، أهلاً بك في شاميلكو!");
+      toast.success(t('messages.LOGIN_SUCCESSFUL'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء تسجيل الدخول بواسطة جوجل.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useRegisterMutation = () => {
   const handleSuccess = useAuthSuccess();
+    const{t} = useLanguage();
+
   const {user} = useAuth();
   return useMutation<SuccessResult<AuthTokensResponse>, FailResult, RegisterRequestDto>({
     mutationKey: authKeys.action("register"),
@@ -91,31 +97,33 @@ export const useRegisterMutation = () => {
 
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
       handleSuccess(data);
-      toast.success("تم إنشاء الحساب بنجاح، أهلاً بك في شاميلكو!");
+      toast.success(t('messages.REGISTRATION_SUCCESSFUL'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إنشاء الحساب، يرجى التأكد من البيانات.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useForgotPasswordMutation = () => {
-  
+    const{t} = useLanguage();
+
   return useMutation<SuccessResult<void>, FailResult, ForgotPasswordRequest>({
     mutationKey: authKeys.action("forgetPassword"),
 
     mutationFn: AuthApi.forgotPassword,
     onSuccess: () => {
-      toast.success("تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني بنجاح.");
+      toast.success(t('messages.FORGOT_PASSWORD_EMAIL_SENT'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء محاولة استعادة كلمة المرور.");
+      toast.error(getLocalizedMessage(error?.code));
     }
   });
 };
 
 export const useResetPasswordMutation = () => {
     const {user} = useAuth();
+  const{t} = useLanguage();
 
   return useMutation<SuccessResult<void>, FailResult, ResetPasswordRequest>({
     mutationKey: authKeys.action("resetPassword"),
@@ -124,16 +132,18 @@ export const useResetPasswordMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تم تغيير كلمة المرور بنجاح، يمكنك الآن تسجيل الدخول.");
+      toast.success(t('messages.PASSWORD_RESET_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء تغيير كلمة المرور.");
+      toast.error(getLocalizedMessage(error?.code));
     }
   });
 };
 
 export const useChangePasswordMutation = () => {
     const {user} = useAuth();
+      const{t} = useLanguage();
+
   return useMutation<SuccessResult<boolean>, FailResult, ChangePasswordRequest>({
     
     mutationKey: authKeys.action("changePassword"),
@@ -141,16 +151,17 @@ export const useChangePasswordMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تم تحديث كلمة المرور بنجاح.");
+      toast.success(t('messages.PASSWORD_CHANGED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء تحديث كلمة المرور.");
+      toast.error(getLocalizedMessage(error?.code));
     }
   });
 };
 
 export const useLogoutMutation = () => {
   const { logoutState } = useAuth();
+  const{t} = useLanguage();
   const queryClient = useQueryClient();
 
   return useMutation<SuccessResult<boolean>, FailResult, void>({
@@ -159,10 +170,10 @@ export const useLogoutMutation = () => {
     onSuccess: () => {
       logoutState();
       queryClient.clear();
-      toast.success("تم تسجيل الخروج بنجاح. نتمنى رؤيتك قريباً!");
+      toast.success(t('messages.LOGOUT_SUCCESS'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء تسجيل الخروج.");
+      toast.error(getLocalizedMessage(error?.code));
     }
   });
-};
+};  

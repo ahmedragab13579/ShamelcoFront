@@ -1,3 +1,5 @@
+import type { AppMessageCodes } from "../Enums/AppEnums";
+
 export default interface FailResult {
-  error: string;
+  code: AppMessageCodes;
 }

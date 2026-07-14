@@ -8,10 +8,13 @@ import type { UpdateCustomerProfileCommand } from "../../Types/Customer/Request"
 import { useAuth } from "../../../Context/Auth/AuthContext";
 import asGUID from "../../Types/shared/Guid";
 import { NotificationKeys } from "../Keys/useNotificationKeys";
+import { useLanguage } from "../../../UserInterFace/Hooks/Shared/useLanguage";
+import { getLocalizedMessage } from "../../../locales/i18nHelper";
 
 export const useUpdateCustomerProfileMutation = () => {
   const queryClient = useQueryClient();
   const {user} = useAuth();
+  const { t } = useLanguage();
   return useMutation<SuccessResult<boolean>, FailResult, UpdateCustomerProfileCommand>({
     mutationKey: [...customerKeys.profiles(), "update"],
     mutationFn: CustomerApi.UpdateProfile,
@@ -22,10 +25,10 @@ export const useUpdateCustomerProfileMutation = () => {
         queryClient.invalidateQueries({ queryKey: customerKeys.profile(asGUID(user.userId)) });
         queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user.userId)) });
       }
-      toast.success("تم تحديث البيانات بنجاح!");
+      toast.success(t('messages.PROFILE_UPDATED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء تحديث البيانات، يرجى المحاولة مرة أخرى.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };

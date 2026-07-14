@@ -9,10 +9,13 @@ import { useAuth } from "../../../Context/Auth/AuthContext";
 import type Pagination from "../../Types/shared/Paganation";
 import asGUID from "../../Types/shared/Guid";
 
-export const useGetNotifications = (Pagination:Pagination) => {
-  const {user} = useAuth();
-  return useQuery<SuccessResult<PagedResult< NotificationDto>>, FailResult>({
-    queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000"),Pagination.page), 
+export const useGetNotifications = (Pagination: Pagination) => {
+  const { user } = useAuth();
+  return useQuery<SuccessResult<PagedResult<NotificationDto>>, FailResult>({
+    queryKey: NotificationKeys.listPaged(
+      asGUID(user?.userId || "00000000-0000-0000-0000-000000000000"), 
+      Pagination.page || 1
+    ), 
     queryFn: () => NotificationApi.GetNotifications(Pagination),
     enabled: !!user?.userId, 
   });

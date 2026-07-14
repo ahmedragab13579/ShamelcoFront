@@ -10,10 +10,13 @@ import { dashboardKeys } from "../Keys/useDashboardKeys";
 import { NotificationKeys } from "../Keys/useNotificationKeys";
 import asGUID from "../../Types/shared/Guid";
 import { useAuth } from "../../../Context/Auth/AuthContext";
+import { useLanguage } from "../../../UserInterFace/Hooks/Shared/useLanguage";
+import { getLocalizedMessage } from "../../../locales/i18nHelper";
 
 export const useRemoveVenueTableMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
   return useMutation<SuccessResult<boolean>, FailResult, DeleteVenueTableCommand>({
     mutationKey: [...venueKeys.tables(), "remove"], 
     mutationFn: VenueApi.DeleteVenueTable,
@@ -25,17 +28,18 @@ export const useRemoveVenueTableMutation = () => {
       queryClient.invalidateQueries({ queryKey: dashboardKeys.venueDetails(variables.VenueId) });
       queryClient.invalidateQueries({ queryKey: dashboardKeys.venues() });
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
-      toast.success("تم حذف معلومات الطاولة بنجاح!");
+      toast.success(t('messages.TABLE_DELETED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء حذف معلومات الطاولة، يرجى المحاولة مرة أخرى.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useAddVenueTableMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<GUID>, FailResult, AddVenueTableCommand>({
     mutationKey: [...venueKeys.tables(), "add"], 
@@ -48,17 +52,18 @@ export const useAddVenueTableMutation = () => {
       queryClient.invalidateQueries({ queryKey: dashboardKeys.venues() });
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تمت إضافة معلومات الطاولة بنجاح!");
+      toast.success(t('messages.TABLE_CREATED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إضافة معلومات الطاولة.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useRemoveVenueConsoleMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, DeleteConsoleCommand>({
     mutationKey: [...venueKeys.consoles(), "remove"], 
@@ -69,17 +74,18 @@ export const useRemoveVenueConsoleMutation = () => {
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
       queryClient.invalidateQueries({ queryKey: venueKeys.consolesListOfVenue(variables.VenueId) });
 
-      toast.success("تم حذف معلومات الجهاز بنجاح!");
+      toast.success(t('messages.CONSOLE_DELETED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء حذف معلومات الجهاز.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useAddVenueConsoleMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<GUID>, FailResult, AddConsoleCommand>({
     mutationKey: [...venueKeys.consoles(), "add"], 
@@ -89,17 +95,18 @@ export const useAddVenueConsoleMutation = () => {
       queryClient.invalidateQueries({ queryKey: venueKeys.consolesListOfVenue(variables.VenueId) });
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تمت إضافة معلومات الجهاز بنجاح!");
+      toast.success(t('messages.CONSOLE_ADDED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إضافة معلومات الجهاز.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useAddVenueMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<GUID>, FailResult, AddVenueCommand>({
     mutationKey: [...venueKeys.all, "add"], 
@@ -108,22 +115,23 @@ export const useAddVenueMutation = () => {
       queryClient.invalidateQueries({ queryKey: venueKeys.lists() });
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
       queryClient.invalidateQueries({ queryKey: dashboardKeys.venues() });
-      toast.success("تمت إضافة المكان التجاري بنجاح!");
+      toast.success(t('messages.VENUE_ADDED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إضافة المكان.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useUpdateVenueTableMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, UpdateVenueTableCommand>({
     mutationKey: [...venueKeys.tables(), "update"], 
     mutationFn: VenueApi.UpdateVenueTable,
-    onSuccess: (_, variables) => { // Variables -> variables
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: venueKeys.tableDetail(variables.Id) });
       queryClient.invalidateQueries({ queryKey: venueKeys.tables() });
       queryClient.invalidateQueries({ queryKey: venueKeys.floorPlans() });
@@ -131,39 +139,41 @@ export const useUpdateVenueTableMutation = () => {
       queryClient.invalidateQueries({ queryKey: dashboardKeys.venueDetails(variables.VenueId) });
             queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تم تحديث معلومات الطاولة بنجاح!");
+      toast.success(t('messages.TABLE_UPDATED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء تحديث معلومات الطاولة.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useUpdateVenueMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, UpdateVenueCommand>({
     mutationKey: [...venueKeys.all, "update"], 
     mutationFn: VenueApi.UpdateVenue,
-    onSuccess: (_, variables) => { // Variables -> variables
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: venueKeys.lists() });
       queryClient.invalidateQueries({ queryKey: venueKeys.detail(variables.Id) });
       queryClient.invalidateQueries({ queryKey: dashboardKeys.venues() });
       queryClient.invalidateQueries({ queryKey: dashboardKeys.venueDetails(variables.Id) });
             queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تم تحديث معلومات المكان التجاري بنجاح!");
+      toast.success(t('messages.VENUE_UPDATED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء تحديث معلومات المكان.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useRemoveVenueTableConsoleMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, RemoveVenueTableConsoleCommand>({
     mutationKey: [...venueKeys.consoles(), "remove"], 
@@ -175,17 +185,18 @@ export const useRemoveVenueTableConsoleMutation = () => {
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
       queryClient.invalidateQueries({ queryKey: venueKeys.floorPlan(variables.VenueId) });
       
-      toast.success("تم حذف معلومات وحدة التحكم من الطاولة بنجاح!");
+      toast.success(t('messages.CONSOLE_REMOVED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء حذف معلومات وحدة التحكم.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useAddVenueTableConsoleMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, AddVenueTableConsoleCommand>({
     mutationKey: [...venueKeys.consoles(), "add"], 
@@ -197,17 +208,18 @@ export const useAddVenueTableConsoleMutation = () => {
       queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
       queryClient.invalidateQueries({ queryKey: venueKeys.floorPlan(variables.VenueId) });
       
-      toast.success("تمت إضافة معلومات وحدة التحكم إلى الطاولة بنجاح!");
+      toast.success(t('messages.CONSOLE_ASSIGNED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إضافة معلومات وحدة التحكم.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useAddStaffMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, AddStaffRequest>({
     mutationKey: [...venueKeys.staff(), "add"], 
@@ -216,17 +228,18 @@ export const useAddStaffMutation = () => {
       queryClient.invalidateQueries({ queryKey: venueKeys.staffListOfVenue(variables.VenueId) });
             queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تمت إضافة الموظف بنجاح!");
+      toast.success(t('messages.STAFF_ADDED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء إضافة الموظف.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };
 
 export const useRevokeStaffMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const {user} = useAuth();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<boolean>, FailResult, RevokeStaffRequest>({
     mutationKey: [...venueKeys.staff(), "revoke"], 
@@ -235,10 +248,10 @@ export const useRevokeStaffMutation = () => {
       queryClient.invalidateQueries({ queryKey: venueKeys.staffListOfVenue(variables.VenueId) });
             queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
 
-      toast.success("تم سحب صلاحيات الموظف بنجاح!");
+      toast.success(t('messages.STAFF_ACCESS_REVOKED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء سحب صلاحيات الموظف.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };

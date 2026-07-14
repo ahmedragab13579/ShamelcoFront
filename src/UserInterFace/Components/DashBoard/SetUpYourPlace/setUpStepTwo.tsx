@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown } from "lucide-react"; 
+import { ChevronDown, Loader2 } from "lucide-react"; 
 import { 
   setupPitchSchema, 
   setupVenueSchema, 
@@ -13,26 +13,30 @@ import type { PitchType, PlaceType, VenueType } from "../../../../BackEndIntegra
 import { SharedInput } from "../../Common/SharedInput";
 import { useAddVenueMutation } from "../../../../BackEndIntegration/Hooks/Mutations/useVenueMutations";
 import { useAddPitchMutation } from "../../../../BackEndIntegration/Hooks/Mutations/usePitchMutations";
+import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
+// مكون القائمة المنسدلة متوافق 100% مع الهوية والـ RTL/LTR والـ Dark Mode
 const SharedSelect = ({ label, register, error, options, ...props }: any) => (
   <div className="flex flex-col space-y-1.5 w-full">
-    <label className="block text-sm font-bold text-shamelco-darker mb-1 text-right">{label}</label>
+    <label className="block text-sm font-bold text-shamelco-darker mb-1 text-start">{label}</label>
     <div className="relative">
       <select
         {...register}
         {...props}
-        className={`w-full px-4 py-3 rounded-xl border appearance-none transition-all duration-300 outline-none text-shamelco-darker bg-shamelco-dark/5 
+        className={`w-full px-4 pe-10 py-3 rounded-md border appearance-none transition-all duration-200 outline-none text-shamelco-darker bg-shamelco-surface text-start font-bold text-sm cursor-pointer shadow-sm
           ${error 
-            ? "border-status-danger focus:ring-status-danger/20" 
-            : "border-shamelco-dark/10 focus:border-shamelco-accent focus:bg-white focus:ring-4 focus:ring-shamelco-accent/10"}`}
+            ? "border-status-danger focus:ring-2 focus:ring-status-danger/20" 
+            : "border-shamelco-border hover:border-shamelco-gold/50 focus:border-shamelco-gold focus:ring-2 focus:ring-shamelco-gold/20"}`}
       >
         {options.map((opt: any) => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
+          <option key={opt.value} value={opt.value} className="bg-shamelco-surface text-shamelco-darker font-semibold py-1">
+            {opt.label}
+          </option>
         ))}
       </select>
-      <ChevronDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-shamelco-dark/40 pointer-events-none" />
+      <ChevronDown className="absolute end-3 top-1/2 -translate-y-1/2 w-5 h-5 text-shamelco-muted pointer-events-none" />
     </div>
-    {error && <span className="text-xs font-bold text-status-danger text-right mt-1">{error}</span>}
+    {error && <span className="text-xs font-bold text-status-danger text-start mt-1">{error}</span>}
   </div>
 );
 
@@ -40,6 +44,7 @@ function SetupPitchForm() {
   const nav = useNavigate();
   const AddPitch = useAddPitchMutation();
   const { user, loginState } = useAuth();
+  const { t } = useLanguage();
 
   const { register, handleSubmit, formState: { errors } } = useForm<SetupPitchInput>({
     resolver: zodResolver(setupPitchSchema),
@@ -62,30 +67,42 @@ function SetupPitchForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 animate-in slide-in-from-left-8 duration-500">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <SharedInput label="اسم الملعب" placeholder="مثال: ملعب الأبطال" {...register("Name")} error={errors.Name?.message} />
+        <SharedInput label={t('messages.PITCH_NAME')} placeholder={t('messages.PITCH_NAME_PLACEHOLDER')} {...register("Name")} error={errors.Name?.message} />
         
         <SharedSelect 
-          label="النوع" 
+          label={t('messages.TYPE')} 
           register={register("Type")} 
           error={errors.Type?.message}
           options={[
-            { value: "", label: "اختر النوع..." },
-            { value: "1", label: "خماسي" },
-            { value: "2", label: "سداسي" },
-            { value: "3", label: "تنس" },
-            { value: "4", label: "بادل" }
+            { value: "", label: t('messages.SELECT_TYPE') },
+            { value: "1", label: t('messages.FIVE_A_SIDE') },
+            { value: "2", label: t('messages.SIX_A_SIDE') },
+            { value: "3", label: t('messages.TENNIS') },
+            { value: "4", label: t('messages.PADEL') }
           ]}
         />
 
-        <SharedInput label="سعر الساعة (ج.م)"  type="number" placeholder="10" {...register("HourlyRate", { valueAsNumber: true })} error={errors.HourlyRate?.message} />
-        <SharedInput label="السعة الاستيعابية"  type="number" placeholder="عدد الأفراد -6" {...register("Capacity", { valueAsNumber: true })} error={errors.Capacity?.message} />
+        <SharedInput label={t('messages.PRICE_PER_HOUR')} type="number" placeholder="10" {...register("HourlyRate", { valueAsNumber: true })} error={errors.HourlyRate?.message} />
+        <SharedInput label={t('messages.CAPACITY')} type="number" placeholder={t('messages.CAPACITY_PLACEHOLDER')} {...register("Capacity", { valueAsNumber: true })} error={errors.Capacity?.message} />
       </div>
 
-      <div className="flex justify-end pt-6 border-t border-shamelco-dark/10">
-        <button type="submit" disabled={AddPitch.isPending} className="px-10 py-3.5 rounded-xl font-bold text-shamelco-gold bg-shamelco-darker hover:bg-shamelco-dark transition-all active:scale-95 disabled:opacity-50">
-          {AddPitch.isPending ? "جاري الإنشاء..." : "إنشاء والبدء"}
+      <div className="flex justify-end pt-6 border-t border-shamelco-border">
+        {/* تعديل زرار الحفظ ليكون هو الـ CTA الذهبي الرئيسي */}
+        <button 
+          type="submit" 
+          disabled={AddPitch.isPending} 
+          className="px-10 py-3.5 rounded-md font-black text-shamelco-darker bg-shamelco-gold hover:bg-shamelco-gold-hover focus-visible:outline-shamelco-gold transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-shamelco-gold shadow-gold flex items-center justify-center gap-2 cursor-pointer shrink-0 min-w-[180px]"
+        >
+          {AddPitch.isPending ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin text-shamelco-darker shrink-0" aria-hidden="true" />
+              <span>{t('messages.CREATING')}</span>
+            </>
+          ) : (
+            <span>{t('messages.CREATE_AND_START')}</span>
+          )}
         </button>
       </div>
     </form>
@@ -96,6 +113,7 @@ function SetupVenueForm() {
   const nav = useNavigate();
   const AddVenue = useAddVenueMutation();
   const { user, loginState } = useAuth();
+  const { t } = useLanguage();
 
   const { register, handleSubmit, formState: { errors } } = useForm<SetupVenueInput>({
     resolver: zodResolver(setupVenueSchema),
@@ -105,7 +123,7 @@ function SetupVenueForm() {
     AddVenue.mutate({
         name: data.Name,
         type: data.Type as VenueType,
-        hourRate:data.hourRate
+        hourRate: data.hourRate
       },
       {
         onSuccess: (response) => {
@@ -117,27 +135,39 @@ function SetupVenueForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 animate-in slide-in-from-left-8 duration-500">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <SharedInput label="اسم الصالة / الكافيه" placeholder="مثال: شاميلكو كافيه" {...register("Name")} error={errors.Name?.message} />
-        <SharedInput label="سعر الساعه للطاوله" placeholder="0" {...register("hourRate")} error={errors.hourRate?.message} />
+        <SharedInput label={t('messages.VENUE_NAME')} placeholder={t('messages.VENUE_NAME_PLACEHOLDER')} {...register("Name")} error={errors.Name?.message} />
+        <SharedInput label={t('messages.TABLE_PRICE_PER_HOUR')} type="number" placeholder="0" {...register("hourRate", { valueAsNumber: true })} error={errors.hourRate?.message} />
+        
         <SharedSelect 
-          label="النوع" 
+          label={t('messages.TYPE')} 
           register={register("Type")} 
           error={errors.Type?.message}
           options={[
-            { value: "", label: "اختر النوع..." },
-            { value: "Cafe", label: "صالة بلايستيشن" },
-            { value: "Cafe", label: "كافيه / قهوة" },
-            { value: "Cafe", label:  "صالة بلياردو"},
-            { value: "Restaurant", label:"مطعم" }
+            { value: "", label: t('messages.SELECT_TYPE') },
+            { value: "Cafe", label: t('messages.PLAYSTATION_LOUNGE') },
+            { value: "Cafe", label: t('messages.CAFE_COFFEE') },
+            { value: "Cafe", label: t('messages.BILLIARD_LOUNGE') },
+            { value: "Restaurant", label: t('messages.RESTAURANT') }
           ]}
         />
       </div>
 
-      <div className="flex justify-end pt-6 border-t border-shamelco-dark/10">
-        <button type="submit" disabled={AddVenue.isPending} className="px-10 py-3.5 rounded-xl font-bold text-shamelco-gold bg-shamelco-darker hover:bg-shamelco-dark transition-all active:scale-95 disabled:opacity-50">
-          {AddVenue.isPending ? "جاري الإنشاء..." : "إنشاء والبدء"}
+      <div className="flex justify-end pt-6 border-t border-shamelco-border">
+        <button 
+          type="submit" 
+          disabled={AddVenue.isPending} 
+          className="px-10 py-3.5 rounded-md font-black text-shamelco-darker bg-shamelco-gold hover:bg-shamelco-gold-hover focus-visible:outline-shamelco-gold transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-shamelco-gold shadow-gold flex items-center justify-center gap-2 cursor-pointer shrink-0 min-w-[180px]"
+        >
+          {AddVenue.isPending ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin text-shamelco-darker shrink-0" aria-hidden="true" />
+              <span>{t('messages.CREATING')}</span>
+            </>
+          ) : (
+            <span>{t('messages.CREATE_AND_START')}</span>
+          )}
         </button>
       </div>
     </form>
@@ -148,6 +178,7 @@ interface SetupStepTwoProps {
   businessType: PlaceType;
   userId: string;
 }
+
 export default function SetupStepTwo({ businessType }: SetupStepTwoProps) {
   return businessType === "Pitch" ? <SetupPitchForm /> : <SetupVenueForm />;
 }

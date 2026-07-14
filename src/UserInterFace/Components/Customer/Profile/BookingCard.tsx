@@ -3,15 +3,16 @@ import type { BookingStatus } from "../../../../BackEndIntegration/Types/Enums/A
 import type { BookingDto } from "../../../../BackEndIntegration/Types/Bookings/Response";
 import RescheduleBookingButton from "../../Bookings/RescheduleBookingButton";
 import CancelBookingButton from "../../Bookings/CancelBookingButton";
+import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
-const STATUS_CONFIG: Record<BookingStatus, { label: string; color: string }> = {
-  Pending: { label: "قيد الانتظار", color: "bg-status-warning/10 text-status-warning border-status-warning/20" },
-  Confirmed: { label: "مؤكد", color: "bg-shamelco-accent/10 text-shamelco-accent border-shamelco-accent/20" },
-  InProgress: { label: "جاري الآن", color: "bg-status-success/10 text-status-success border-status-success/20" },
-  CheckedIn: { label: "تم الحضور", color: "bg-status-success/10 text-status-success border-status-success/20" },
-  Completed: { label: "مكتمل", color: "bg-shamelco-dark/10 text-shamelco-dark border-shamelco-dark/20" },
-  Cancelled: { label: "ملغي", color: "bg-status-danger/10 text-status-danger border-status-danger/20" },
-  NoShow: { label: "لم يحضر", color: "bg-shamelco-darker/10 text-shamelco-darker border-shamelco-darker/20" },
+const STATUS_CONFIG: Record<BookingStatus, { color: string }> = {
+  Pending: { color: "bg-status-warning/10 text-status-warning border-status-warning/20" },
+  Confirmed: { color: "bg-shamelco-accent/10 text-shamelco-accent border-shamelco-accent/20" },
+  InProgress: { color: "bg-status-success/10 text-status-success border-status-success/20" },
+  CheckedIn: { color: "bg-status-success/10 text-status-success border-status-success/20" },
+  Completed: { color: "bg-shamelco-dark/10 text-shamelco-dark border-shamelco-dark/20" },
+  Cancelled: { color: "bg-status-danger/10 text-status-danger border-status-danger/20" },
+  NoShow: { color: "bg-shamelco-darker/10 text-shamelco-darker border-shamelco-darker/20" },
 };
 
 interface BookingCardProps {
@@ -21,21 +22,35 @@ interface BookingCardProps {
 }
 
 export default function BookingCard({ item, type, isUpcoming }: BookingCardProps) { 
+  const { t, currentLang } = useLanguage();
   const statusData = STATUS_CONFIG[item.status as BookingStatus] || STATUS_CONFIG.Pending;
   
+  const getStatusLabel = (status: BookingStatus) => {
+    switch (status) {
+      case 'Pending': return t('messages.STATUS_PENDING');
+      case 'Confirmed': return t('messages.STATUS_CONFIRMED');
+      case 'InProgress': return t('messages.STATUS_IN_PROGRESS');
+      case 'CheckedIn': return t('messages.STATUS_CHECKED_IN');
+      case 'Completed': return t('messages.STATUS_COMPLETED');
+      case 'Cancelled': return t('messages.STATUS_CANCELLED');
+      case 'NoShow': return t('messages.STATUS_NO_SHOW');
+      default: return t('messages.STATUS_PENDING');
+    }
+  };
+
   // تعديل النوع ليقبل string أو Date
   const formatDate = (dateString: string | Date) => {
     const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
-    return new Date(dateString).toLocaleDateString("ar-EG", options);
+    return new Date(dateString).toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US', options);
   };
   
   const formatTime = (timeString: string | Date) => {
     const options: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit", hour12: true };
-    return new Date(timeString).toLocaleTimeString("ar-EG", options);
+    return new Date(timeString).toLocaleTimeString(currentLang === 'ar' ? 'ar-EG' : 'en-US', options);
   };
 
   return (
-    <div className="bg-white border border-shamelco-dark/10 rounded-2xl shadow-sm hover:shadow-md hover:border-shamelco-accent/30 transition-all duration-300 flex flex-col group overflow-hidden">
+    <div className="bg-shamelco-surface border border-shamelco-dark/10 rounded-2xl shadow-sm hover:shadow-md hover:border-shamelco-accent/30 transition-all duration-300 flex flex-col group overflow-hidden">
       
       {/* الجزء العلوي: تفاصيل الحجز */}
       <div className="flex items-center justify-between p-5">
@@ -50,10 +65,10 @@ export default function BookingCard({ item, type, isUpcoming }: BookingCardProps
           
           <div>
             <h4 className="font-bold text-shamelco-darker">
-              {type === "pitch" ? "حجز ملعب" : "حجز صالة ترفيهية"}
-              {/* ضفنا اسم الجهة من الباك إند كمعلومة إضافية تحت العنوان */}
+              {type === "pitch" ? t('messages.BOOK_PITCH') : t('messages.BOOK_VENUE')}
+              {/* اسم الجهة */}
               {item.entityName && (
-                <span className="mr-2 text-sm font-normal text-shamelco-dark/60">- {item.entityName}</span>
+                <span className="ms-2 text-sm font-normal text-shamelco-dark/60">- {item.entityName}</span>
               )}
             </h4>
             
@@ -70,19 +85,18 @@ export default function BookingCard({ item, type, isUpcoming }: BookingCardProps
           </div>
         </div>
         
-        <div className="text-right flex flex-col items-end gap-2">
+        <div className="text-end flex flex-col items-end gap-2">
           <span className={`text-xs font-bold px-3 py-1.5 rounded-lg border ${statusData.color}`}>
-            {statusData.label}
+            {getStatusLabel(item.status as BookingStatus)}
           </span>
         </div>
       </div>
 
-      {/* الجزء السفلي: أزرار العمليات (يظهر فقط لو الحجز قادم) */}
+      {/* الجزء السفلي: أزرار العمليات */}
       {isUpcoming && (
         <div className="flex items-center justify-end gap-3 px-5 py-3.5 bg-shamelco-bg/80 border-t border-shamelco-dark/5">
           <RescheduleBookingButton bookingId={item.bookingId} />
           
-          {/* التأكد من إمكانية الإلغاء من خلال الباك إند */}
           {item.canCancel && (
              <CancelBookingButton bookingId={item.bookingId} />
           )}

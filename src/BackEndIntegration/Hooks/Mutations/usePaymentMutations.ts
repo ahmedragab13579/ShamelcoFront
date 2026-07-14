@@ -12,9 +12,12 @@ import { venueKeys } from "../Keys/useVenueKeys";
 import { paymentKeys } from "../Keys/usePaymentKeys"; 
 import type { InitiatePaymentCommandResponse } from "../../Types/Payment/Response";
 import { NotificationKeys } from "../Keys/useNotificationKeys";
+import { useLanguage } from "../../../UserInterFace/Hooks/Shared/useLanguage";
+import { getLocalizedMessage } from "../../../locales/i18nHelper";
 
 export const useInitiatePaymentMutation = () => {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   return useMutation<SuccessResult<InitiatePaymentCommandResponse>, FailResult, InitiatePaymentCommand>({
     mutationKey: [...paymentKeys.all, "initiate"], 
@@ -31,10 +34,10 @@ export const useInitiatePaymentMutation = () => {
           queryClient.invalidateQueries({ queryKey: venueKeys.availability(response.data.targetTableId) });
       }
       
-      toast.success("تم تجهيز الدفع، جاري تحويلك...");
+      toast.success(t('messages.PAYMENT_LINK_GENERATED_SUCCESSFULLY'));
     },
     onError: (error) => {
-      toast.error(error?.error || "حدث خطأ أثناء بدء عملية الدفع، يرجى المحاولة مرة أخرى.");
+      toast.error(getLocalizedMessage(error?.code));
     },
   });
 };

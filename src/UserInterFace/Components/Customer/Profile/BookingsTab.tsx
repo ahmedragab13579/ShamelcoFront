@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Trophy, Gamepad2 } from "lucide-react"; // استدعاء الأيقونات بدل الإيموجيز
 import type { CustomerProfileDto } from "../../../../BackEndIntegration/Types/Customer/Response";
 import BookingCard from "./BookingCard";
 import type { TabType } from "../../../Hooks/Customer/useProfile";
 import type { BookingDto } from "../../../../BackEndIntegration/Types/Bookings/Response";
+import emptyStateIllust from "../../../Images/emptystateUI.png";
+import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
 export default function BookingsTab({ profileData, activeTab }: { profileData: CustomerProfileDto; activeTab: TabType }) {
   const [bookingStatus, setBookingStatus] = useState<"upcoming" | "completed">("upcoming");
+  const { t } = useLanguage();
 
   const getActiveBookings = () => {
     if (activeTab === "pitches") {
@@ -24,7 +26,6 @@ export default function BookingsTab({ profileData, activeTab }: { profileData: C
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-      {/* حاوية التابات: خلفية شفافة من أغمق لون عشان تلم التابات جواها بشياكة */}
       <div className="flex bg-shamelco-dark/5 rounded-xl p-1 mb-5">
         <button
           onClick={() => setBookingStatus("upcoming")}
@@ -34,7 +35,7 @@ export default function BookingsTab({ profileData, activeTab }: { profileData: C
               : "text-shamelco-accent hover:text-shamelco-darker hover:bg-shamelco-dark/5" // التاب العادي
           }`}
         >
-          حجوزات قادمة
+          {t('messages.UPCOMING_BOOKINGS')}
         </button>
         <button
           onClick={() => setBookingStatus("completed")}
@@ -44,7 +45,7 @@ export default function BookingsTab({ profileData, activeTab }: { profileData: C
               : "text-shamelco-accent hover:text-shamelco-darker hover:bg-shamelco-dark/5"
           }`}
         >
-          سجل الحجوزات
+          {t('messages.BOOKING_HISTORY')}
         </button>
       </div>
 
@@ -55,16 +56,14 @@ export default function BookingsTab({ profileData, activeTab }: { profileData: C
           ))
         ) : (
           // حالة عدم وجود بيانات (Empty State)
-          <div className="flex flex-col items-center justify-center text-center py-12 bg-white rounded-3xl border border-shamelco-dark/10 shadow-sm">
-            <div className="text-shamelco-dark/20 mb-4">
-              {activeTab === "pitches" ? (
-                <Trophy className="w-16 h-16" strokeWidth={1.5} />
-              ) : (
-                <Gamepad2 className="w-16 h-16" strokeWidth={1.5} />
-              )}
+          <div className="flex flex-col items-center justify-center text-center py-12 bg-shamelco-surface rounded-3xl border border-shamelco-dark/10 shadow-sm px-4">
+            <div className="w-24 h-24 mb-4 opacity-85">
+              <img src={emptyStateIllust} alt={t('messages.NO_BOOKINGS')} className="w-full h-full object-contain" />
             </div>
             <p className="text-shamelco-dark/70 font-medium">
-              لا توجد {bookingStatus === "upcoming" ? "حجوزات قادمة" : "حجوزات سابقة"} {activeTab === "pitches" ? "للملاعب" : "للصالات"} حالياً.
+              {activeTab === "pitches"
+                ? (bookingStatus === "upcoming" ? t('messages.NO_UPCOMING_BOOKINGS_PITCHES') : t('messages.NO_PREVIOUS_BOOKINGS_PITCHES'))
+                : (bookingStatus === "upcoming" ? t('messages.NO_UPCOMING_BOOKINGS_VENUES') : t('messages.NO_PREVIOUS_BOOKINGS_VENUES'))}
             </p>
           </div>
         )}
