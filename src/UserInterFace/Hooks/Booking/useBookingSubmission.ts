@@ -103,12 +103,12 @@ export function useBookingSubmission({
       }
 
       // حالة: نجاح الحجز + نجاح الدفع (أونلاين)
-      if (paymentResult.data.Link) {
+      if (paymentResult.data.link) {
         nav("/success", {
           state: {
             title: "تم تسجيل الحجز المبدئي! ⏳",
             message: "تم حفظ حجزك بنجاح. يرجى إتمام عملية الدفع لتأكيد الحجز بشكل نهائي.",
-            redirectUrl: paymentResult.data.Link,
+            redirectUrl: paymentResult.data.link,
             buttonText: "الانتقال لصفحة الدفع 💳"
           }
         });
