@@ -11,6 +11,7 @@ export interface DecodedUser {
 export interface AuthContextType {
   user: DecodedUser | null;
   isAuthenticated: boolean;
+  isInitializing: boolean;
   loginState: (tokens: DecodedUser, token?: string) => void;
   logoutState: () => void;
 }

@@ -1,12 +1,10 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Flame, ChevronRight, ChevronLeft } from "lucide-react"; 
-import { useTopRatedPlacesQuery } from "../../../BackEndIntegration/Hooks/Queries/useCustomerQueries.ts";
 import Loading from "../../Components/Common/Loading";
 import Error from "../../Components/Common/Error";
 import PlaceCard from "./PlaceCard.tsx"; 
 import type { PlaceSearchDto } from "../../../BackEndIntegration/Types/Customer/Response.ts";
-import { useLanguage } from "../../Hooks/Shared/useLanguage";
+import { useTopRatings } from "../../Hooks/App/useTopRatings";
 
 interface TopRatingProps {
   showViewAll?: boolean;
@@ -21,12 +19,18 @@ export default function TopRating({
   initialPageSize = 20,
   useSkeleton = false
 }: TopRatingProps) {
-  
-  const [page, setPage] = useState<number>(1);
-  const [pageSize] = useState<number>(initialPageSize);
-  const { t } = useLanguage();
-
-  const { data, isLoading, isError, isFetching } = useTopRatedPlacesQuery({ page, pageSize });
+  const {
+    page,
+    t,
+    isLoading,
+    isError,
+    isFetching,
+    items,
+    totalPages,
+    hasNextPage,
+    handleNextPage,
+    handlePrevPage,
+  } = useTopRatings({ initialPageSize });
 
   if (isLoading) {
     if (useSkeleton) {
@@ -72,10 +76,6 @@ export default function TopRating({
     return <Error text={t('messages.ERROR_LOADING_PITCHES')} />;
   }
 
-  const items = data?.data?.items || [];
-  const totalPages = data?.data?.totalPages || 1;
-  const hasNextPage = data?.data?.hasNextPage ?? page < totalPages;
-
   return (
     <section className="pb-8">
       {/* الهيدر */}
@@ -114,7 +114,7 @@ export default function TopRating({
       {withPagination && (
         <div className="flex items-center justify-center gap-3 md:gap-4 mt-8 px-4">
           <button
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            onClick={handlePrevPage}
             disabled={page === 1 || isFetching}
             className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-bold bg-shamelco-surface border border-shamelco-border text-shamelco-darker rounded-xl hover:bg-shamelco-sand hover:border-shamelco-muted disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-shamelco-surface disabled:hover:border-shamelco-border transition-all shadow-2xs cursor-pointer active:scale-95"
           >
@@ -134,7 +134,7 @@ export default function TopRating({
           </div>
           
           <button
-            onClick={() => setPage((prev) => prev + 1)}
+            onClick={handleNextPage}
             disabled={!hasNextPage || isFetching}
             className="flex items-center gap-1.5 px-5 py-2.5 text-sm font-black bg-shamelco-darker text-shamelco-surface rounded-xl hover:bg-shamelco-accent disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-shamelco-darker transition-all shadow-sm cursor-pointer active:scale-95"
           >

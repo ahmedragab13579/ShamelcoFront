@@ -7,6 +7,7 @@ import MainTabs from "../../Components/Customer/Profile/MainTabs";
 import { PersonalInformationTab } from "../../Components/Customer/Profile/PersonalInformationTab";
 import { useProfile } from "../../Hooks/Customer/useProfile";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
+import CustomerReviewsTab from "../../Components/Customer/Profile/CustomerReviewsTab";
 
 export default function Profile() {
   const { 
@@ -62,13 +63,19 @@ export default function Profile() {
               />
             </div>
           )}
-          
+
           {(activeTab === "pitches" || activeTab === "venues") && (
             <div className="animate-in fade-in zoom-in-95 duration-200">
               <BookingsTab 
                 profileData={profileData} 
                 activeTab={activeTab} 
               />
+            </div>
+          )}
+
+          {activeTab === "reviews" && (
+            <div className="animate-in fade-in zoom-in-95 duration-200">
+              <CustomerReviewsTab userId={userId!} />
             </div>
           )}
         </div>

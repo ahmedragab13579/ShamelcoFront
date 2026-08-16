@@ -3,7 +3,7 @@ import type { PitchAvailabilityDto, PitchDto } from "../../Types/Pitch/Response"
 import type PagedResult from "../../Types/Result/PagedResult";
 import type SuccessResult from "../../Types/Result/Success";
 import type { GUID } from "../../Types/shared/Guid";
-import type Pagination from "../../Types/shared/Paganation";
+import type { PlaceFilterParams } from "../../Types/shared/Paganation";
 import apiClient from "../SharedAPIConfig/api";
 
 export const PitchApi = {
@@ -50,11 +50,10 @@ export const PitchApi = {
     return await apiClient.post<never,SuccessResult<boolean>>(`pitches/${data.pitchId}/block`,data,);
     
   },
-  GetPitches: async (data: Pagination): Promise<SuccessResult<PagedResult<PitchDto>>> => {
+  GetPitches: async (data: PlaceFilterParams): Promise<SuccessResult<PagedResult<PitchDto>>> => {
     return await apiClient.get<never,SuccessResult<PagedResult<PitchDto>>>("pitches", {
       params: data,
     });
-    
   },
   GetPitchAvailableSlots: async (data: GUID,date:string): Promise<SuccessResult<PitchAvailabilityDto>> => {
     return await apiClient.get<never,SuccessResult<PitchAvailabilityDto>>(`pitches/${data}/availability`,{

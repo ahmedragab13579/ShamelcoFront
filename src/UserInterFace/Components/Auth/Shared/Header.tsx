@@ -14,7 +14,7 @@ export default function Header() {
       <div className="absolute -bottom-20 -end-20 w-96 h-96 bg-shamelco-accent/20 rounded-full blur-3xl"></div>
       
       <div className="z-10 flex items-center gap-4 mb-6">
-        <img src={Logo} alt={t('messages.SHAMELCO')} className="h-12 w-auto" />
+        <img src={Logo} alt={t('messages.SHAMELCO')} width={160} height={48} className="h-12 w-auto" />
         <div className="flex items-center gap-2 text-3xl font-black text-shamelco-gold tracking-wide">
           {t('messages.SHAMELCO')} 
           <span className="flex items-center gap-1 text-shamelco-bg font-normal text-xl">

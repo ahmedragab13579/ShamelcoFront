@@ -6,6 +6,7 @@ import Pagination from "../../Components/Common/Pagination";
 import QuickFilters from "../../Components/Common/QuickFilters";
 
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
+import LocationFilterBar from "../../Components/Common/LocationFilterBar";
 
 export default function Pitches() {
   const { t } = useLanguage();
@@ -25,6 +26,9 @@ export default function Pitches() {
     setActiveFilter,
     page,
     setPage,
+    governorateId,
+    cityId,
+    handleLocationChange,
     filteredPitches,
     totalPages,
     hasNextPage,
@@ -47,6 +51,11 @@ export default function Pitches() {
           filters={QUICK_FILTERS}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
+        />
+        <LocationFilterBar
+          selectedGovId={governorateId}
+          selectedCityId={cityId}
+          onFilterChange={handleLocationChange}
         />
       </div>
       <PitchesGrid filteredPitches={filteredPitches} />

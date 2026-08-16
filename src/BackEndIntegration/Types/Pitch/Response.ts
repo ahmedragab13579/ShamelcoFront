@@ -1,4 +1,5 @@
 import type { PitchStatus, PitchType } from "../Enums/AppEnums";
+import type { ReviewDto } from "../Reviews/Response";
 import type { GUID } from "../shared/Guid";
 
 
@@ -31,6 +32,7 @@ export interface PitchDto extends MiniPitchDto {
   openIn: string;  
   closeIn: string; 
   ownerId: string;
+  review?: ReviewDto | null;
 }
 
 export interface TimeSlotDto {

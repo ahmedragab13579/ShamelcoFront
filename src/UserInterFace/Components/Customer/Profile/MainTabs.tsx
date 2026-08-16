@@ -1,4 +1,4 @@
-import { User, Trophy, Gamepad2 } from "lucide-react";
+import { User, Trophy, Gamepad2, Star } from "lucide-react";
 import type { TabType } from "../../../Hooks/Customer/useProfile";
 import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
@@ -9,6 +9,7 @@ export default function MainTabs({ activeTab, setActiveTab }: { activeTab: TabTy
     { id: "info", label: t('messages.MY_ACCOUNT'), icon: User },
     { id: "pitches", label: t('messages.PITCHES'), icon: Trophy },
     { id: "venues", label: t('messages.VENUES'), icon: Gamepad2 },
+    { id: "reviews", label: t('messages.MY_REVIEWS') || "تقييماتي", icon: Star },
   ] as const;
 
   return (

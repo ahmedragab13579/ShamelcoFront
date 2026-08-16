@@ -6,6 +6,8 @@ export interface AddVenueCommand {
   name: string;
   hourRate:number;
   type: VenueType;
+  governorateId: number;
+  cityId: number;
 }
 export interface GetVenueTableCommand {
  Id:GUID;

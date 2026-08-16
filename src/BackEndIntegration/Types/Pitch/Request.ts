@@ -6,6 +6,8 @@ export interface AddPitchCommand {
   type: PitchType;
   hourlyRate: number;
   capacity: number;
+  governorateId: number;
+  cityId: number;
 }
 
 export interface BlockPitchCommand {

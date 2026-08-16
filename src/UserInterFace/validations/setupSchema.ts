@@ -14,6 +14,12 @@ export const setupPitchSchema = z.object({
   Capacity: z
     .number({ error: "يجب إدخال رقم صحيح" })
     .min(5, { message: "السعة يجب أن تكون أكبر من 5" }),
+  GovernorateId: z
+    .number({ error: "الرجاء اختيار المحافظة" })
+    .min(1, { message: "الرجاء اختيار المحافظة" }),
+  CityId: z
+    .number({ error: "الرجاء اختيار المدينة" })
+    .min(1, { message: "الرجاء اختيار المدينة" }),
 });
 
 export const setupVenueSchema = z.object({
@@ -27,6 +33,12 @@ export const setupVenueSchema = z.object({
   Type: z
     .string()
     .min(1, { message: "الرجاء اختيار نوع الصالة/الكافيه" }),
+  GovernorateId: z
+    .number({ error: "الرجاء اختيار المحافظة" })
+    .min(1, { message: "الرجاء اختيار المحافظة" }),
+  CityId: z
+    .number({ error: "الرجاء اختيار المدينة" })
+    .min(1, { message: "الرجاء اختيار المدينة" }),
 });
 
 export type SetupPitchInput = z.infer<typeof setupPitchSchema>;

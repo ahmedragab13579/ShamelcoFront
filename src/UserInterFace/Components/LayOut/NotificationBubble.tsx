@@ -1,6 +1,7 @@
 import { CheckCircle2 } from "lucide-react";
 import type { NotificationDto } from "../../../BackEndIntegration/Types/Notification/Response";
 import { useMarkAsReadNotificationMutation } from "../../../BackEndIntegration/Hooks/Mutations/useNotificationMutations";
+import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 interface NotificationBubbleProps {
   notification: NotificationDto;
@@ -8,11 +9,12 @@ interface NotificationBubbleProps {
 }
 
 export default function NotificationBubble({ notification, onClick }: NotificationBubbleProps) {
+  const { t, currentLang, isRtl } = useLanguage();
   const { mutate: markAsRead, isPending } = useMarkAsReadNotificationMutation();
 
   const formatDate = (dateString: string | Date) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-EG", {
+    return new Intl.DateTimeFormat(isRtl ? "ar-EG" : "en-US", {
       month: "short",
       day: "numeric",
       hour: "numeric",
@@ -62,11 +64,11 @@ export default function NotificationBubble({ notification, onClick }: Notificati
                 : "font-medium text-shamelco-darker/80"
             }`}
           >
-            {notification.title}
+            {currentLang === "ar" ? notification.titleAr : notification.titleEn}
           </p>
           
           <p className="text-xs text-shamelco-muted mt-1 leading-relaxed line-clamp-2">
-            {notification.message}
+            {currentLang === "ar" ? notification.messageAr : notification.messageEn}
           </p>
           
           <span className="text-[10px] text-shamelco-muted/80 mt-2 block font-medium">
@@ -81,7 +83,7 @@ export default function NotificationBubble({ notification, onClick }: Notificati
             disabled={isPending}
             type="button"
             className="shrink-0 p-1.5 rounded-md text-shamelco-muted hover:text-shamelco-gold hover:bg-shamelco-gold-soft transition-all duration-150 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 disabled:opacity-50 cursor-pointer"
-            title="تحديد كمقروء"
+            title={t("messages.MARK_AS_READ") || "تحديد كمقروء"}
           >
             <CheckCircle2 className="w-4 h-4" />
           </button>

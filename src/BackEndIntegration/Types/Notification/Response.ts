@@ -1,12 +1,13 @@
-import type { NotificationType } from "../Enums/AppEnums";
 import type { GUID } from "../shared/Guid";
 
 
 export interface NotificationDto {
-    id: GUID;
-    title: string;
-    message: string;
-    type: NotificationType;
-    isRead: boolean;
-    createdAt: Date;
+  id: GUID;
+  titleAr: string;
+  titleEn: string;
+  messageAr: string;
+  messageEn: string;
+  type: string;
+  isRead: boolean;
+  createdAt: Date;
 }

@@ -21,6 +21,7 @@ export type NotificationType =
   | "RevokeStaff"
   | "UpdateTable";
 
+
 export type BookingStatus = "Pending" | "Confirmed" | "InProgress" | "CheckedIn" | "Cancelled" | "NoShow" | "Completed";
 export type ConsoleStatus = "Idle" | "Active" | "Maintenance";
 export type PaymentMethod = "Cash" | "Card" | "MobileWallet";
@@ -48,19 +49,28 @@ export type VenueStaffRole = "Cashier" | "Manager" | "Waiter";
 
 export type AppMessageCodes =
   // ==========================================
-  // 1. General
+  // 1. Validation & System Infrastructure
   // ==========================================
-  | 'INVALID_DATA'
-  | 'OPERATION_FAILED'
-  | 'OPERATION_SUCCESSFUL'
+  | 'VALIDATION_ERROR'
   | 'GENERAL_ERROR'
-  | 'UNAUTHORIZED_ACCESS'
-  | 'FORBIDDEN'
-  | 'ACCESS_DENIED'
-  | 'INVALID_PAGE'
-  | 'INVALID_PAGE_SIZE'
-  | 'MISSING_PLACE_ID'
-  | 'CONCURRENCY_CONFLICT'
+  | 'DATABASE_ERROR'
+  | 'CONCURRENCY_UPDATE_CONFLICT'
+  | 'PAGINATION_INVALID_PAGE'
+  | 'PAGINATION_INVALID_PAGE_SIZE'
+  | 'NOT_VENUE_OWNER'
+  | 'NOT_PITCH_OWNER'
+  | 'INSUFFICIENT_PERMISSIONS'
+  | 'DASHBOARD_ACCESS_DENIED'
+  | 'REPORT_ACCESS_DENIED'
+  | 'PROFILE_UPDATE_FAILED'
+  | 'BOOKING_CREATION_FAILED'
+  | 'BOOKING_CANCELLATION_FAILED'
+  | 'BOOKING_RESCHEDULE_FAILED'
+  | 'PASSWORD_CHANGE_FAILED'
+  | 'PASSWORD_RESET_FAILED'
+  | 'ACTION_COMPLETED_SUCCESSFULLY'
+  | 'STATUS_UPDATED_SUCCESSFULLY'
+  | 'PLACE_ID_REQUIRED'
 
   // ==========================================
   // 1. Services
@@ -166,6 +176,14 @@ export type AppMessageCodes =
   | 'PITCHES_RETRIEVED_SUCCESSFULLY'
   | 'AVAILABILITY_RETRIEVED_SUCCESSFULLY'
   | 'EMPTY_PITCH_ADDRESS'
+  | 'INVALID_GOVERNORATE_ID'
+  | 'INVALID_CITY_ID'
+  | 'INVALID_GOVERNORATE_NAME'
+  | 'INVALID_CITY_NAME'
+  | 'GOVERNORATE_NOT_FOUND'
+  | 'CITY_NOT_FOUND'
+  | 'GOVERNORATES_RETRIEVED_SUCCESSFULLY'
+  | 'CITIES_RETRIEVED_SUCCESSFULLY'
   | 'EMPTY_PITCH_IMAGE'
   | 'EMPTY_PITCH_NAME'
   | 'INVALID_HOURLY_RATE'
@@ -320,3 +338,288 @@ export type AppMessageCodes =
   | 'KPIS_RETRIEVED_SUCCESSFULLY'
   | 'OCCUPANCY_RETRIEVED_SUCCESSFULLY'
   | 'PAYMENT_BREAKDOWN_RETRIEVED_SUCCESSFULLY';
+
+
+  export type EgyptGovernorate =
+  | "Cairo"
+  | "Giza"
+  | "Alexandria"
+  | "Dakahlia"
+  | "Sharqia"
+  | "Qalyubia"
+  | "Gharbia"
+  | "Monufia"
+  | "Beheira"
+  | "KafrElSheikh"
+  | "PortSaid"
+  | "Ismailia"
+  | "Suez"
+  | "Damietta"
+  | "Faiyum"
+  | "BeniSuef"
+  | "Minya"
+  | "Assiut"
+  | "Sohag"
+  | "Qena"
+  | "Luxor"
+  | "Aswan"
+  | "RedSea"
+  | "NewValley"
+  | "Matrouh"
+  | "NorthSinai"
+  | "SouthSinai";
+
+export type EgyptCity =
+  // ==========================================
+  // ── Cairo (Governorate 1) ──
+  // ==========================================
+  | "NasrCity"
+  | "Heliopolis"
+  | "Maadi"
+  | "NewCairo"
+  | "Shoubra"
+  | "Helwan"
+  | "Downtown"
+  | "Mokattam"
+  | "Zamalek"
+
+  // ==========================================
+  // ── Giza (Governorate 2) ──
+  // ==========================================
+  | "Dokki"
+  | "Mohandeseen"
+  | "Haram"
+  | "Faisal"
+  | "SixthOfOctober"
+  | "SheikhZayed"
+  | "Imbaba"
+  | "AlBadrashin"
+  | "AlHawamdeya"
+
+  // ==========================================
+  // ── Alexandria (Governorate 3) ──
+  // ==========================================
+  | "AlMontazah"
+  | "Sharq"
+  | "Wasat"
+  | "AlGomrok"
+  | "Gharb"
+  | "AlAgamy"
+  | "AlAmriya"
+  | "BorgElArab"
+
+  // ==========================================
+  // ── Dakahlia (Governorate 4) ──
+  // ==========================================
+  | "Mansoura"
+  | "Talkha"
+  | "MitGhamr"
+  | "Dekernes"
+  | "ElSenbellawein"
+  | "Belqas"
+
+  // ==========================================
+  // ── Sharqia (Governorate 5) ──
+  // ==========================================
+  | "Zagazig"
+  | "TenthOfRamadan"
+  | "Belbeis"
+  | "MinyaAlQamh"
+  | "Faqous"
+  | "AbuKebir"
+
+  // ==========================================
+  // ── Qalyubia (Governorate 6) ──
+  // ==========================================
+  | "Banha"
+  | "ShoubraElKheima"
+  | "ElQanaterElKhayreya"
+  | "Toukh"
+  | "Qalyub"
+  | "ObourCity"
+
+  // ==========================================
+  // ── Gharbia (Governorate 7) ──
+  // ==========================================
+  | "Tanta"
+  | "ElMahallaElKubra"
+  | "Zefta"
+  | "KafrElZayat"
+  | "Basyoun"
+
+  // ==========================================
+  // ── Monufia (Governorate 8) ──
+  // ==========================================
+  | "ShibinElKom"
+  | "Menouf"
+  | "Ashmoun"
+  | "Quesna"
+  | "SadatCity"
+
+  // ==========================================
+  // ── Beheira (Governorate 9) ──
+  // ==========================================
+  | "Damanhour"
+  | "KafrElDawwar"
+  | "Rashid"
+  | "ItaiElBaroud"
+  | "KomHamada"
+
+  // ==========================================
+  // ── Kafr El Sheikh (Governorate 10) ──
+  // ==========================================
+  | "KafrElSheikhCity"
+  | "Desouk"
+  | "Baltim"
+  | "Biyala"
+  | "Qallin"
+
+  // ==========================================
+  // ── Port Said (Governorate 11) ──
+  // ==========================================
+  | "ElSharq"
+  | "ElArab"
+  | "ElZohour"
+  | "PortFouad"
+
+  // ==========================================
+  // ── Ismailia (Governorate 12) ──
+  // ==========================================
+  | "IsmailiaCity"
+  | "Fayed"
+  | "ElQantaraSharq"
+  | "ElQantaraGharb"
+  | "ElTellElKebir"
+
+  // ==========================================
+  // ── Suez (Governorate 13) ──
+  // ==========================================
+  | "SuezCity"
+  | "ElArbaeen"
+  | "Ataqah"
+  | "ElGanayen"
+
+  // ==========================================
+  // ── Damietta (Governorate 14) ──
+  // ==========================================
+  | "DamiettaCity"
+  | "NewDamietta"
+  | "Faraskour"
+  | "KafrSaad"
+  | "ElZarqa"
+
+  // ==========================================
+  // ── Faiyum (Governorate 15) ──
+  // ==========================================
+  | "FaiyumCity"
+  | "Senoress"
+  | "Etsa"
+  | "Tamiya"
+  | "Ibsheway"
+
+  // ==========================================
+  // ── Beni Suef (Governorate 16) ──
+  // ==========================================
+  | "BeniSuefCity"
+  | "AlWasta"
+  | "Nasser"
+  | "Biba"
+  | "AlFashn"
+
+  // ==========================================
+  // ── Minya (Governorate 17) ──
+  // ==========================================
+  | "MinyaCity"
+  | "Maghagha"
+  | "BeniMazar"
+  | "Matay"
+  | "Samalut"
+  | "Mallawi"
+
+  // ==========================================
+  // ── Assiut (Governorate 18) ──
+  // ==========================================
+  | "AssiutCity"
+  | "Dairut"
+  | "AlQusiyyah"
+  | "Abnub"
+  | "AbuTig"
+
+  // ==========================================
+  // ── Sohag (Governorate 19) ──
+  // ==========================================
+  | "SohagCity"
+  | "Akhmim"
+  | "AlBalyana"
+  | "Girga"
+  | "Tama"
+  | "Tahta"
+
+  // ==========================================
+  // ── Qena (Governorate 20) ──
+  // ==========================================
+  | "QenaCity"
+  | "NagHammadi"
+  | "Deshna"
+  | "Qus"
+  | "AbuTesht"
+
+  // ==========================================
+  // ── Luxor (Governorate 21) ──
+  // ==========================================
+  | "LuxorCity"
+  | "AlQurna"
+  | "Esna"
+  | "Armant"
+
+  // ==========================================
+  // ── Aswan (Governorate 22) ──
+  // ==========================================
+  | "AswanCity"
+  | "Edfu"
+  | "KomOmbo"
+  | "Daraw"
+
+  // ==========================================
+  // ── Red Sea (Governorate 23) ──
+  // ==========================================
+  | "Hurghada"
+  | "Safaga"
+  | "ElQuseir"
+  | "MarsaAlam"
+  | "RasGharib"
+
+  // ==========================================
+  // ── New Valley (Governorate 24) ──
+  // ==========================================
+  | "Kharga"
+  | "Dakhla"
+  | "Farafra"
+  | "Baris"
+
+  // ==========================================
+  // ── Matrouh (Governorate 25) ──
+  // ==========================================
+  | "MarsaMatrouh"
+  | "ElHammam"
+  | "ElAlamein"
+  | "ElDabaa"
+  | "Siwa"
+
+  // ==========================================
+  // ── North Sinai (Governorate 26) ──
+  // ==========================================
+  | "Arish"
+  | "SheikhZuweid"
+  | "Rafah"
+  | "BirElAbd"
+
+  // ==========================================
+  // ── South Sinai (Governorate 27) ──
+  // ==========================================
+  | "SharmElSheikh"
+  | "Dahab"
+  | "Nuweiba"
+  | "ElTor"
+  | "Taba"
+  | "SaintCatherine";

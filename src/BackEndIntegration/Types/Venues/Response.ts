@@ -1,5 +1,6 @@
 import type { ConsoleStatus, TableStatus, VenueType } from "../Enums/AppEnums";
 import type { TimeSlotDto } from "../Pitch/Response";
+import type { ReviewDto } from "../Reviews/Response";
 import type { GUID } from "../shared/Guid";
 
 export interface LiveFloorPlanDto {
@@ -58,7 +59,7 @@ export interface VenueDto {
     address: string;
     mainImage: string;
     rating: number;
-
+    review?: ReviewDto | null;
     hourRate:number;
     isActive: boolean;
     isOpen: boolean;

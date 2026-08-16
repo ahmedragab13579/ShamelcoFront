@@ -33,6 +33,8 @@ import { VenueConsolesPage } from "../UserInterFace/Pages/DashBoards/Venue/Manag
 import { VenueMoreActionsPage } from "../UserInterFace/Pages/DashBoards/Venue/MoreActions";
 import SuccessPage from "../UserInterFace/Pages/Shared/SuccessPage";
 import ErrorPage from "../UserInterFace/Pages/Shared/ErrorPage";
+import PitchReviewsPage from "../UserInterFace/Pages/DashBoards/Pitch/PitchReviewsPage";
+import VenueReviewsPage from "../UserInterFace/Pages/DashBoards/Venue/VenueReviewsPage";
 
 
 export const router = createBrowserRouter([
@@ -101,6 +103,10 @@ export const router = createBrowserRouter([
         element: <PitchDashboard />,
       },
       {
+        path: "pitch/:id/reviews",
+        element: <PitchReviewsPage />,
+      },
+      {
         path: "pitch/:id/settings",
         element: <PitchSettingsPage />,
       },
@@ -111,6 +117,10 @@ export const router = createBrowserRouter([
       {
         path: "venue/:id",
         element: <VenueDashboard />,
+      },
+      {
+        path: "venue/:id/reviews",
+        element: <VenueReviewsPage />,
       },
       {
         path: "venue/:id/settings",

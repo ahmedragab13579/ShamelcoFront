@@ -5,7 +5,7 @@ import { useCustomerProfileQuery } from "../../../BackEndIntegration/Hooks/Queri
 import asGUID from "../../../BackEndIntegration/Types/shared/Guid";
 import { useLogoutMutation } from "../../../BackEndIntegration/Hooks/Mutations/useAuthMutations";
 
-export type TabType = "info" | "pitches" | "venues";
+export type TabType = "info" | "pitches" | "venues" | "reviews";
 
 export function useProfile() {
   const { user, logoutState } = useAuth();

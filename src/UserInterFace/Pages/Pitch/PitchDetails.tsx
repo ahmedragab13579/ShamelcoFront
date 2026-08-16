@@ -1,48 +1,18 @@
-import React, { useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { useGetPitch } from "../../../BackEndIntegration/Hooks/Queries/usePitchQueries";
-import asGUID from "../../../BackEndIntegration/Types/shared/Guid";
+import { Link } from "react-router-dom";
 import Error from "../../Components/Common/Error";
-import type { SubmitReviewCommand } from "../../../BackEndIntegration/Types/Reviews/Request";
-import soccerField from "../../Images/premium_synthetic_turf_football_field_at_nig.jpg";
-import padelCourt from "../../Images/modern_panoramic_padel_tennis_court_at_eveni.jpg";
-import tennisCourt from "../../Images/professional_hardcourt_tennis_court_at_twili.jpg";
-import { useSubmitReviewMutation } from "../../../BackEndIntegration/Hooks/Mutations/useReviewMutations";
-import { Loader2, Star, MapPin, Users, Clock, ShieldCheck, ChevronDown, ChevronLeft } from "lucide-react";
-import { useLanguage } from "../../Hooks/Shared/useLanguage";
+import { Star, MapPin, Users, Clock, ShieldCheck, ChevronDown, ChevronLeft } from "lucide-react";
+import { usePitchDetails } from "../../Hooks/Pitch/usePitchDetails";
+import ReviewSection from "../../Components/Review/ReviewSection";
 
 export default function PlaceDetails() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const result = useGetPitch(asGUID(id!));
-  const { mutate, isPending } = useSubmitReviewMutation();
-
-  const [ratingHover, setRatingHover] = useState<number>(0);
-  const [ratingValue, setRatingValue] = useState<number>(0);
-  const [reviewDescription, setReviewDescription] = useState<string>("");
-  
-  const [showDetails, setShowDetails] = useState<boolean>(false);
-  const { t } = useLanguage();
-
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReviewDescription(e.target.value);
-  };
-
-  function HandleReviewSubmit() {
-    const review: SubmitReviewCommand = {
-      placeId: asGUID(id||"00000000-0000-0000-0000-000000000000"),
-      placeType: "Pitch",
-      rating: ratingValue,
-      comment: reviewDescription,
-    };
-    mutate(review, {
-      onSuccess: () => {
-        setRatingValue(0);
-        setReviewDescription("");
-      }
-    });
-  }
+  const {
+    navigate,
+    result,
+    showDetails,
+    setShowDetails,
+    getFallback,
+    t,
+  } = usePitchDetails();
 
   if (result.isLoading) {
     return <PlaceDetailsSkeleton />;
@@ -53,12 +23,6 @@ export default function PlaceDetails() {
   }
 
   const place = result.data.data;
-  
-  const getFallback = (type: string) => {
-    if (type === "Padel") return padelCourt;
-    if (type === "Tennis") return tennisCourt;
-    return soccerField;
-  };
 
   return (
     <div className="w-full bg-shamelco-bg min-h-screen pb-24 md:pb-8 font-sans animate-fade-in">
@@ -167,56 +131,11 @@ export default function PlaceDetails() {
         </div>
 
         {/* قسم التقييمات */}
-        <div className="bg-shamelco-surface rounded-3xl shadow-xs border border-shamelco-border p-6 md:p-8 mt-6 animate-fade-in">
-          <h3 className="text-lg font-black text-shamelco-darker mb-4">
-            {t('messages.ADD_YOUR_RATING_STAR')}
-          </h3>
-
-          <div className="flex items-center gap-1.5 mb-4 flex-row-reverse justify-end">
-            {[5, 4, 3, 2, 1].map((star) => (
-              <button
-                key={star}
-                type="button"
-                className="focus:outline-none cursor-pointer active:scale-90 transition-transform"
-                onMouseEnter={() => setRatingHover(star)}
-                onMouseLeave={() => setRatingHover(0)}
-                onClick={() => setRatingValue(star)}
-                aria-label={`${star} ${t('messages.STARS')}`}
-              >
-                <Star
-                  className={`w-8 h-8 transition-colors duration-200 ${
-                    star <= (ratingHover || ratingValue)
-                      ? "text-shamelco-gold fill-current"
-                      : "text-shamelco-border"
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
-
-          <textarea
-            rows={3}
-            placeholder={t('messages.WRITE_YOUR_EXPERIENCE_OPTIONAL')}
-            value={reviewDescription}
-            onChange={handleDescriptionChange}
-            className="w-full bg-shamelco-bg border border-shamelco-border rounded-2xl p-4 text-sm focus:ring-4 focus:ring-shamelco-accent/10 focus:border-shamelco-accent focus:bg-shamelco-surface outline-none transition-all resize-none mb-4 font-semibold text-shamelco-darker"
-          ></textarea>
-
-          <button
-            disabled={ratingValue === 0 || isPending}
-            onClick={HandleReviewSubmit}
-            className="w-full py-3.5 bg-shamelco-accent hover:bg-shamelco-dark text-white font-black rounded-xl text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] shadow-xs"
-          >
-            {isPending ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-                <span>{t('messages.SENDING')}</span>
-              </>
-            ) : (
-              <span>{t('messages.SUBMIT_RATING')}</span>
-            )}
-          </button>
-        </div>
+        <ReviewSection
+          placeId={place.id}
+          placeType="Pitch"
+          existingReview={place.review}
+        />
       </div>
 
       {/* شريط السعر والحجز الثابت بالأسفل */}
@@ -242,11 +161,9 @@ export default function PlaceDetails() {
 function PlaceDetailsSkeleton() {
   return (
     <div className="w-full bg-shamelco-bg min-h-screen pb-24 md:pb-8 font-sans animate-pulse">
-      {/* هيرو الغلاف */}
       <div className="w-full h-64 md:h-80 bg-shamelco-sand relative" />
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10 space-y-6">
-        {/* تفاصيل الهيكل */}
         <div className="bg-shamelco-surface rounded-3xl border border-shamelco-border p-6 sm:p-8 space-y-6 shadow-2xs">
           <div className="flex justify-between items-start">
             <div className="space-y-2">
@@ -264,7 +181,6 @@ function PlaceDetailsSkeleton() {
           <div className="h-10 w-full bg-shamelco-sand rounded-xl" />
         </div>
 
-        {/* تقييمات الهيكل */}
         <div className="bg-shamelco-surface rounded-3xl border border-shamelco-border p-6 sm:p-8 space-y-4 shadow-2xs">
           <div className="h-5 w-32 bg-shamelco-border rounded-md" />
           <div className="flex gap-1">

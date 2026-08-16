@@ -2,6 +2,7 @@ import type PagedResult from "../../Types/Result/PagedResult";
 import type SuccessResult from "../../Types/Result/Success";
 import type { GUID } from "../../Types/shared/Guid";
 import type Pagination from "../../Types/shared/Paganation";
+import type { PlaceFilterParams } from "../../Types/shared/Paganation";
 import type { 
   AddConsoleCommand,
   AddStaffRequest,
@@ -123,7 +124,7 @@ export const VenueApi = {
   },
 
 
-  GetVenues: async (data: Pagination): Promise<SuccessResult<PagedResult<MiniVenueDto>>> => {
+  GetVenues: async (data: PlaceFilterParams): Promise<SuccessResult<PagedResult<MiniVenueDto>>> => {
     return await apiClient.get<never,SuccessResult<PagedResult<MiniVenueDto>>>("venues", {
       params: data,
     });

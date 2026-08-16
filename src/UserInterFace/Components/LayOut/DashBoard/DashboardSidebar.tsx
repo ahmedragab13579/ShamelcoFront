@@ -47,7 +47,7 @@ export default function DashboardSidebar({ isSidebarOpen, setIsSidebarOpen, navI
               <NavLink
                 key={item.path}
                 to={item.path}
-                end={item.path === "/dashboard"}
+                end={item.name === "HOME"}
                 onClick={() => setIsSidebarOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center gap-3.5 px-4 py-3 rounded-md font-bold transition-all duration-200 group focus-visible:outline-shamelco-gold ${

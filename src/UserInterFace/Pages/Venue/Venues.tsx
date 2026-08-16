@@ -5,6 +5,7 @@ import { useGetVenues } from "../../../BackEndIntegration/Hooks/Queries/useVenue
 import type { MiniVenueDto } from "../../../BackEndIntegration/Types/Venues/Response";
 import QuickFilters from "../../Components/Common/QuickFilters";
 import Pagination from "../../Components/Common/Pagination";
+import LocationFilterBar from "../../Components/Common/LocationFilterBar";
 
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
@@ -20,8 +21,16 @@ export default function Venues() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [page, setPage] = useState<number>(1);
   const [pageSize] = useState<number>(20);
+  const [governorateId, setGovernorateId] = useState<number | undefined>();
+  const [cityId, setCityId] = useState<number | undefined>();
 
-  const VENUES = useGetVenues({ page, pageSize });
+  const VENUES = useGetVenues({ page, pageSize, governorateId, cityId });
+
+  const handleLocationChange = (govId?: number, cId?: number) => {
+    setGovernorateId(govId);
+    setCityId(cId);
+    setPage(1);
+  };
 
   if (VENUES.isLoading) {
     return <VenuesSkeleton />;
@@ -47,6 +56,11 @@ export default function Venues() {
           filters={QUICK_FILTERS}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
+        />
+        <LocationFilterBar
+          selectedGovId={governorateId}
+          selectedCityId={cityId}
+          onFilterChange={handleLocationChange}
         />
       </div>
 

@@ -1,4 +1,4 @@
-import { MdSportsSoccer, MdSportsEsports } from "react-icons/md";
+import { Trophy, Gamepad2 } from "lucide-react";
 import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
 interface PlaceTypeTabsProps {
@@ -19,7 +19,7 @@ export default function PlaceTypeTabs({ activePlaceType, onPlaceTypeChange }: Pl
             : "text-shamelco-accent hover:text-shamelco-darker hover:bg-shamelco-dark/5" // التاب غير النشط: أزرق بترولي
         }`}
       >
-        <MdSportsSoccer size={20} />
+        <Trophy size={20} />
         {t('messages.PITCHES')}
       </button>
 
@@ -31,7 +31,7 @@ export default function PlaceTypeTabs({ activePlaceType, onPlaceTypeChange }: Pl
             : "text-shamelco-accent hover:text-shamelco-darker hover:bg-shamelco-dark/5" 
         }`}
       >
-        <MdSportsEsports size={20} />
+        <Gamepad2 size={20} />
         {t('messages.VENUES_AND_STORES')}
       </button>
     </div>

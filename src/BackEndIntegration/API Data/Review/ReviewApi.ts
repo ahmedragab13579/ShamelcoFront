@@ -42,4 +42,14 @@ export const ReviewApi = {
       data,
     );
   },
+
+  updateReview: async (
+    id: GUID,
+    data: { rating: number; comment?: string },
+  ): Promise<SuccessResult<GUID>> => {
+    return await apiClient.put<never, SuccessResult<GUID>>(
+      `reviews/${id}`,
+      data,
+    );
+  },
 };

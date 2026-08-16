@@ -6,11 +6,12 @@ import type SuccessResult from "../../Types/Result/Success";
 import type FailResult from "../../Types/Result/Fail";
 import type { GUID } from "../../Types/shared/Guid";
 import type Pagination from "../../Types/shared/Paganation";
+import type { PlaceFilterParams } from "../../Types/shared/Paganation";
 import { venueKeys } from "../Keys/useVenueKeys";
 import type { GetVenueTableCommand } from "../../Types/Venues/Request";
 
 
-export const useGetVenues = (params: Pagination) => {
+export const useGetVenues = (params: PlaceFilterParams) => {
   return useQuery<SuccessResult<PagedResult<MiniVenueDto>>, FailResult>({
     queryKey: venueKeys.list(params),
     queryFn: () => VenueApi.GetVenues(params),

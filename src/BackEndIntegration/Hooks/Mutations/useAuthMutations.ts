@@ -25,10 +25,13 @@ import { getLocalizedMessage } from "../../../locales/i18nHelper";
 const normalizeDecodedToken = (
   rawToken: Record<string, unknown>,
 ): DecodedUser => {
+  const rawRole = (rawToken.Role || rawToken.role) as string;
+  const role = rawRole ? rawRole.charAt(0).toUpperCase() + rawRole.slice(1).toLowerCase() : "";
+
   return {
     userId: (rawToken.UserId || rawToken.userId) as string,
     email: (rawToken.Email || rawToken.email) as string | undefined,
-    role: (rawToken.Role || rawToken.role) as string,
+    role,
     name: (rawToken.Name || rawToken.name) as string | undefined,
     pitchId: (rawToken.PitchId || rawToken.pitchId) as string | undefined,
     venueId: (rawToken.VenueId || rawToken.venueId) as string | undefined,

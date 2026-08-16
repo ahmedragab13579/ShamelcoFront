@@ -17,7 +17,7 @@ export default function Header({ setIsSidebarOpen }: { setIsSidebarOpen: (result
         
         {/* اللوجو */}
         <Link to="/home" className="flex items-center gap-3 transition-transform hover:scale-105" aria-label="الذهاب للرئيسية">
-          <img src={Logo} alt="شاميلكو" className="h-10 w-auto" aria-hidden="true" />
+          <img src={Logo} alt="شاميلكو" width={140} height={40} className="h-10 w-auto" aria-hidden="true" />
           <span className="sr-only">شاميلكو</span>
         </Link>
 

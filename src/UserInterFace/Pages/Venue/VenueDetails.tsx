@@ -8,6 +8,7 @@ import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.j
 import type { VenueType } from "../../../BackEndIntegration/Types/Enums/AppEnums";
 import { Star, MapPin, Grid, ChevronLeft } from "lucide-react";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
+import ReviewSection from "../../Components/Review/ReviewSection";
 
 const VenueHero = ({ mainImage, name, rating, type }: { mainImage: string, name: string, rating: number, type: VenueType }) => {
   const navigate = useNavigate();  
@@ -149,6 +150,12 @@ export default function VenueDetails() {
           isActive={venue.isActive} 
           openIn={venue.openIn} 
           closeIn={venue.closeIn} 
+        />
+
+        <ReviewSection 
+          placeId={venue.id} 
+          placeType="Venue" 
+          existingReview={venue.review} 
         />
 
       </div>

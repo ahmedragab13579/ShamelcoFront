@@ -14,13 +14,18 @@ import type {
 import apiClient from "../../BackEndIntegration/API Data/SharedAPIConfig/api";
 import toast from 'react-hot-toast';
 import { useLanguage } from "../../UserInterFace/Hooks/Shared/useLanguage";
+import { secureStorage } from "../../utils/secureStorage";
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const normalizeUserData = (rawData: Record<string, unknown>): DecodedUser => {
+  const rawRole = (rawData.role || rawData.Role) as string;
+  const role = rawRole ? rawRole.charAt(0).toUpperCase() + rawRole.slice(1).toLowerCase() : "";
+
   return {
     userId: (rawData.userId || rawData.UserId) as string,
     email: (rawData.email || rawData.Email) as string | undefined,
-    role: (rawData.role || rawData.Role) as string,
+    role,
     name: (rawData.name || rawData.Name) as string | undefined,
     pitchId: (rawData.pitchId || rawData.PitchId) as string | undefined,
     venueId: (rawData.venueId || rawData.VenueId) as string | undefined,
@@ -40,6 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logoutState = useCallback(() => {
     setUser(null);
+    secureStorage.clearSensitiveData();
   }, []);
 
   useEffect(() => {
@@ -50,8 +56,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           ? response.data.data
           : response.data;
         setUser(normalizeUserData(actualUserData as Record<string, unknown>));
-     } catch (error: any) {
-        const statusCode = error.response?.status;
+     } catch (error) {
+        const err = error as { response?: { status?: number } };
+        const statusCode = err.response?.status;
         if (statusCode === 401 || statusCode === 403) {
           toast.error(t('messages.SERVER_ERROR'));
         } 
@@ -64,19 +71,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     initializeAuth();
-  }, []);
+  }, [t]);
   const contextValue = useMemo(
-    () => ({ user, isAuthenticated, loginState, logoutState }),
-    [user, isAuthenticated, loginState, logoutState]
+    () => ({ user, isAuthenticated, isInitializing, loginState, logoutState }),
+    [user, isAuthenticated, isInitializing, loginState, logoutState]
   );
-
-  if (isInitializing) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#DCD7C9]/10">
-        <span className="w-10 h-10 border-4 border-[#A27B5C] border-t-transparent rounded-full animate-spin"></span>
-      </div>
-    );
-  }
 
   return (
     <AuthContext.Provider value={contextValue}>

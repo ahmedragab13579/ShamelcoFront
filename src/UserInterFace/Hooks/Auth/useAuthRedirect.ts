@@ -11,7 +11,7 @@ export const useAuthRedirect = () => {
     if (isAuthenticated && user) {
       let to = "";
 
-      if (user.role === "Customer") {
+      if (user.role?.toLowerCase() === "customer") {
         to = "/home";
       } else {
         if (user.pitchId && !isEmpty(user.pitchId)) {

@@ -18,22 +18,59 @@ import { getLocalizedMessage } from "../../../locales/i18nHelper";
 
 export const useSubmitReviewMutation = () => {
   const queryClient = useQueryClient();
-  const{user} = useAuth();
+  const { user } = useAuth();
   const { t } = useLanguage();
 
   return useMutation<SuccessResult<GUID>, FailResult, SubmitReviewCommand>({
     mutationKey: [...reviewKeys.all, "submit"], 
     mutationFn: ReviewApi.submitReview,
-    onSuccess: (_,variables) => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: reviewKeys.lists() });
-      if(variables.placeType==="Pitch" && variables.placeId)
-      {
-        queryClient.invalidateQueries({ queryKey: pitchKeys.detail(asGUID(variables.placeId)) });
-        queryClient.invalidateQueries({ queryKey: venueKeys.detail(asGUID(variables.placeId)) });
-        queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId||"00000000-0000-0000-0000-000000000000")) });
+      if (variables.placeId) {
+        if (variables.placeType === "Pitch") {
+          queryClient.invalidateQueries({ queryKey: pitchKeys.detail(asGUID(variables.placeId)) });
+        } else if (variables.placeType === "Venue") {
+          queryClient.invalidateQueries({ queryKey: venueKeys.detail(asGUID(variables.placeId)) });
+        }
       }
+      queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId || "00000000-0000-0000-0000-000000000000")) });
 
       toast.success(t('messages.REVIEW_SUBMITTED_SUCCESSFULLY'));
+    },
+    onError: (error) => {
+      toast.error(getLocalizedMessage(error?.code));
+    },
+  });
+};
+
+export interface UpdateReviewCommandPayload {
+  reviewId: GUID;
+  rating: number;
+  comment?: string;
+  placeId: GUID;
+  placeType: "Pitch" | "Venue";
+}
+
+export const useUpdateReviewMutation = () => {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { t } = useLanguage();
+
+  return useMutation<SuccessResult<GUID>, FailResult, UpdateReviewCommandPayload>({
+    mutationKey: [...reviewKeys.all, "update"],
+    mutationFn: ({ reviewId, rating, comment }) => ReviewApi.updateReview(reviewId, { rating, comment }),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: reviewKeys.lists() });
+      if (variables.placeId) {
+        if (variables.placeType === "Pitch") {
+          queryClient.invalidateQueries({ queryKey: pitchKeys.detail(asGUID(variables.placeId)) });
+        } else if (variables.placeType === "Venue") {
+          queryClient.invalidateQueries({ queryKey: venueKeys.detail(asGUID(variables.placeId)) });
+        }
+      }
+      queryClient.invalidateQueries({ queryKey: NotificationKeys.list(asGUID(user?.userId || "00000000-0000-0000-0000-000000000000")) });
+
+      toast.success(t('messages.REVIEW_UPDATED_SUCCESSFULLY'));
     },
     onError: (error) => {
       toast.error(getLocalizedMessage(error?.code));

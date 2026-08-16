@@ -5,10 +5,10 @@ import type PagedResult from "../../Types/Result/PagedResult";
 import type SuccessResult from "../../Types/Result/Success";
 import type FailResult from "../../Types/Result/Fail";
 import type { GUID } from "../../Types/shared/Guid";
-import type Pagination from "../../Types/shared/Paganation";
+import type { PlaceFilterParams } from "../../Types/shared/Paganation";
 import { pitchKeys } from "../Keys/usePitchKeys";
 
-export const useGetPitches = (data: Pagination) => {
+export const useGetPitches = (data: PlaceFilterParams) => {
   return useQuery<SuccessResult<PagedResult<PitchDto>>, FailResult>({
     queryKey: pitchKeys.list(data),
     queryFn: () => PitchApi.GetPitches(data),

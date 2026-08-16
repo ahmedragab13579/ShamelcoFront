@@ -48,10 +48,10 @@ export default function PlaceCard({ item, className = "" }: PlaceCardProps) {
         
         {/* السعر في أسفل الكارت */}
         <div className="flex items-center justify-between pt-2 border-t border-shamelco-border/60">
-          <div className="text-shamelco-muted text-xs font-medium">{t('messages.STARTING_PRICE_FROM')}</div>
+          <div className="text-gray-700 text-xs font-semibold">{t('messages.STARTING_PRICE_FROM')}</div>
           <div className="font-black text-shamelco-darker text-lg group-hover:text-shamelco-accent transition-colors">
             {item.startingPrice}{" "}
-            <span className="text-[10px] text-shamelco-muted font-bold">
+            <span className="text-[11px] text-gray-700 font-bold">
               {t('messages.CURRENCY')}
             </span>
           </div>
