@@ -1,7 +1,7 @@
 import { Gamepad2 } from "lucide-react";
 import type { TableStatus } from "../../../BackEndIntegration/Types/Enums/AppEnums";
 import type { TableStateDto } from "../../../BackEndIntegration/Types/Venues/Response";
-import tableBackgroundImage from "../../Images/table.jpg";
+import tableBackgroundImage from "../../Images/table.webp";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 const getTableStyle = (status: TableStatus) => {

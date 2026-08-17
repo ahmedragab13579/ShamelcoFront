@@ -5,7 +5,7 @@ import PlaceCard from "../../Components/App/PlaceCard";
 import QuickFilters from "../../Components/Common/QuickFilters";
 import SearchBar from "../../Components/Common/Search";
 import { useExplore } from "../../Hooks/App/Explore/useExplore";
-import emptyStateIllust from "../../Images/emptystateUI.png";
+import emptyStateIllust from "../../Images/emptystateUI.webp";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 export default function Explore() {

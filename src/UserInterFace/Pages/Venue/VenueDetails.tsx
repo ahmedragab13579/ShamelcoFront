@@ -3,8 +3,8 @@ import { useGetVenue } from "../../../BackEndIntegration/Hooks/Queries/useVenueQ
 import asGUID from "../../../BackEndIntegration/Types/shared/Guid";
 import Error from "../../Components/Common/Error";
 import type { VenueDto } from "../../../BackEndIntegration/Types/Venues/Response";
-import sportsCafe from "../../Images/premium_synthetic_turf_cozy_cafe_interior_mo.jpg";
-import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.jpg";
+import sportsCafe from "../../Images/VIP_esports_gaming_lounge_and_console_statio.webp";
+import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.webp";
 import type { VenueType } from "../../../BackEndIntegration/Types/Enums/AppEnums";
 import { Star, MapPin, Grid, ChevronLeft } from "lucide-react";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";

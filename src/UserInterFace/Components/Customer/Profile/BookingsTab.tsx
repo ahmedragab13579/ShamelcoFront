@@ -3,7 +3,7 @@ import type { CustomerProfileDto } from "../../../../BackEndIntegration/Types/Cu
 import BookingCard from "./BookingCard";
 import type { TabType } from "../../../Hooks/Customer/useProfile";
 import type { BookingDto } from "../../../../BackEndIntegration/Types/Bookings/Response";
-import emptyStateIllust from "../../../Images/emptystateUI.png";
+import emptyStateIllust from "../../../Images/emptystateUI.webp";
 import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
 export default function BookingsTab({ profileData, activeTab }: { profileData: CustomerProfileDto; activeTab: TabType }) {
@@ -52,7 +52,12 @@ export default function BookingsTab({ profileData, activeTab }: { profileData: C
       <div className="space-y-3">
         {activeBookings && activeBookings.length > 0 ? (
           activeBookings.map((item: BookingDto) => (
-            <BookingCard key={item.bookingId.toString()} item={item} type={activeTab === "pitches" ? "pitch" : "venue"} />
+            <BookingCard
+              key={item.bookingId.toString()}
+              item={item}
+              type={activeTab === "pitches" ? "pitch" : "venue"}
+              isUpcoming={bookingStatus === "upcoming"}
+            />
           ))
         ) : (
           // حالة عدم وجود بيانات (Empty State)

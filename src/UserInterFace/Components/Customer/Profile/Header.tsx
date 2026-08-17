@@ -1,7 +1,7 @@
 import type { CustomerProfileDto } from "../../../../BackEndIntegration/Types/Customer/Response";
 import { useRef } from "react";
 import { Camera } from "lucide-react"; 
-import defaultAvatar from "../../../Images/avataricon.png";
+import defaultAvatar from "../../../Images/avataricon.webp";
 import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
 export default function Header({ 

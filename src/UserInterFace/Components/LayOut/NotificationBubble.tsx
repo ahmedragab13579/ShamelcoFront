@@ -9,8 +9,23 @@ interface NotificationBubbleProps {
 }
 
 export default function NotificationBubble({ notification, onClick }: NotificationBubbleProps) {
-  const { t, currentLang, isRtl } = useLanguage();
+  const { t, i18n, currentLang, isRtl } = useLanguage();
   const { mutate: markAsRead, isPending } = useMarkAsReadNotificationMutation();
+
+  const getLocalizedText = (text: string | null | undefined) => {
+    if (!text) return "";
+    const key = `messages.${text}`;
+    if (i18n.exists(key)) {
+      return t(key);
+    }
+    return text;
+  };
+
+  const rawTitle = (currentLang === "ar" ? notification.titleAr : notification.titleEn) || notification.titleEn || notification.titleAr;
+  const displayTitle = getLocalizedText(rawTitle);
+
+  const rawMessage = (currentLang === "ar" ? notification.messageAr : notification.messageEn) || notification.messageEn || notification.messageAr;
+  const displayMessage = getLocalizedText(rawMessage);
 
   const formatDate = (dateString: string | Date) => {
     const date = new Date(dateString);
@@ -64,11 +79,11 @@ export default function NotificationBubble({ notification, onClick }: Notificati
                 : "font-medium text-shamelco-darker/80"
             }`}
           >
-            {currentLang === "ar" ? notification.titleAr : notification.titleEn}
+            {displayTitle}
           </p>
           
           <p className="text-xs text-shamelco-muted mt-1 leading-relaxed line-clamp-2">
-            {currentLang === "ar" ? notification.messageAr : notification.messageEn}
+            {displayMessage}
           </p>
           
           <span className="text-[10px] text-shamelco-muted/80 mt-2 block font-medium">

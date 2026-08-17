@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { Info } from "lucide-react"; 
 import type { MiniVenueDto } from "../../../BackEndIntegration/Types/Venues/Response";
-import sportsCafe from "../../Images/premium_synthetic_turf_cozy_cafe_interior_mo.jpg";
-import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.jpg";
+import sportsCafe from "../../Images/VIP_esports_gaming_lounge_and_console_statio.webp";
+import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.webp";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 function Image({ name, type, mainImage }: MiniVenueDto) {

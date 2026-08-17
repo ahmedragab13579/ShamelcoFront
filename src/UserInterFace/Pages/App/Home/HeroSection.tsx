@@ -1,5 +1,5 @@
 import { Search, Sparkles } from "lucide-react";
-import heroBanner from "../../../Images/premium_synthetic_turf_football_field_at_nig.jpg";
+import heroBanner from "../../../Images/premium_synthetic_turf_football_field_at_nig.webp";
 import { useHeroSection } from "../../../Hooks/App/useHeroSection";
 
 export function HeroSection() {
@@ -14,6 +14,7 @@ export function HeroSection() {
           alt="ملعب شاميلكو" 
           width={1200}
           height={600}
+          loading="eager"
           fetchPriority="high"
           className="absolute inset-0 w-full h-full object-cover opacity-50 pointer-events-none select-none"
         />

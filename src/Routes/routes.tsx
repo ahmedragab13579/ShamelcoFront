@@ -1,222 +1,235 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import AuthLayOut from "../UserInterFace/Layouts/AuthLayOut";
-import Login from "../UserInterFace/Pages/Auth/Login";
-import Registration from "../UserInterFace/Pages/Auth/Registration";
-import ForgetPassword from "../UserInterFace/Pages/Auth/ForgetPassword";
-import ResetPassword from "../UserInterFace/Pages/Auth/ResetPassword";
-import ChangePassword from "../UserInterFace/Pages/Auth/ChangePassword";
-import DashboardLayout from "../UserInterFace/Layouts/DashBoardLayOut";
-import VenueDashboard from "../UserInterFace/Pages/DashBoards/Venue/Venue";
-import SetupEntityPage from "../UserInterFace/Pages/DashBoards/SetupEntityPage";
-import AppLayout from "../UserInterFace/Layouts/AppLayout";
-import Home from "../UserInterFace/Pages/App/Home";
-import Pitches from "../UserInterFace/Pages/Pitch/Pitches";
-import Venues from "../UserInterFace/Pages/Venue/Venues";
-import Profile from "../UserInterFace/Pages/App/Profile";
-import PlaceDetails from "../UserInterFace/Pages/Pitch/PitchDetails";
-import TopRatings from "../UserInterFace/Pages/App/TopRatingPlaces";
-import Explore from "../UserInterFace/Pages/App/Explore";
-import VenueDetails from "../UserInterFace/Pages/Venue/VenueDetails";
-import LiveFloorPlan from "../UserInterFace/Pages/Venue/LiveVenuePlanFloor";
-import BookingPage from "../UserInterFace/Pages/Bookings/Booking";
-import OwnerSettingsPage from "../UserInterFace/Pages/DashBoards/OwnerProfile";
-import PitchDashboard from "../UserInterFace/Pages/DashBoards/Pitch/Pitch";
-import ReportsPage from "../UserInterFace/Pages/DashBoards/Reports";
-import VenueSettingsPage from "../UserInterFace/Pages/DashBoards/Venue/Settings";
-import PitchSettingsPage from "../UserInterFace/Pages/DashBoards/Pitch/Settings";
-import { MoreActions } from "../UserInterFace/Pages/DashBoards/Pitch/MoreActions";
-import VenueTableSettingsPage from "../UserInterFace/Pages/DashBoards/Venue/Table/TableDetails";
 import ProtectedRoute from "../UserInterFace/Components/Common/ProtectedRoute";
-import NotFoundPage from "../UserInterFace/Components/Common/NotFoundPage";
-import { Root } from "../UserInterFace/Components/Common/RootRedirect";
-import { VenueConsolesPage } from "../UserInterFace/Pages/DashBoards/Venue/ManageConsoles";
-import { VenueMoreActionsPage } from "../UserInterFace/Pages/DashBoards/Venue/MoreActions";
-import SuccessPage from "../UserInterFace/Pages/Shared/SuccessPage";
-import ErrorPage from "../UserInterFace/Pages/Shared/ErrorPage";
-import PitchReviewsPage from "../UserInterFace/Pages/DashBoards/Pitch/PitchReviewsPage";
-import VenueReviewsPage from "../UserInterFace/Pages/DashBoards/Venue/VenueReviewsPage";
+import Loading from "../UserInterFace/Components/Common/Loading";
 
+const AuthLayOut = lazy(() => import("../UserInterFace/Layouts/AuthLayOut"));
+const Login = lazy(() => import("../UserInterFace/Pages/Auth/Login"));
+const Registration = lazy(() => import("../UserInterFace/Pages/Auth/Registration"));
+const ForgetPassword = lazy(() => import("../UserInterFace/Pages/Auth/ForgetPassword"));
+const ResetPassword = lazy(() => import("../UserInterFace/Pages/Auth/ResetPassword"));
+const ChangePassword = lazy(() => import("../UserInterFace/Pages/Auth/ChangePassword"));
+const DashboardLayout = lazy(() => import("../UserInterFace/Layouts/DashBoardLayOut"));
+const VenueDashboard = lazy(() => import("../UserInterFace/Pages/DashBoards/Venue/Venue"));
+const SetupEntityPage = lazy(() => import("../UserInterFace/Pages/DashBoards/SetupEntityPage"));
+const AppLayout = lazy(() => import("../UserInterFace/Layouts/AppLayout"));
+const Home = lazy(() => import("../UserInterFace/Pages/App/Home"));
+const Pitches = lazy(() => import("../UserInterFace/Pages/Pitch/Pitches"));
+const Venues = lazy(() => import("../UserInterFace/Pages/Venue/Venues"));
+const Profile = lazy(() => import("../UserInterFace/Pages/App/Profile"));
+const PlaceDetails = lazy(() => import("../UserInterFace/Pages/Pitch/PitchDetails"));
+const TopRatings = lazy(() => import("../UserInterFace/Pages/App/TopRatingPlaces"));
+const Explore = lazy(() => import("../UserInterFace/Pages/App/Explore"));
+const VenueDetails = lazy(() => import("../UserInterFace/Pages/Venue/VenueDetails"));
+const LiveFloorPlan = lazy(() => import("../UserInterFace/Pages/Venue/LiveVenuePlanFloor"));
+const BookingPage = lazy(() => import("../UserInterFace/Pages/Bookings/Booking"));
+const RescheduleBookingPage = lazy(() => import("../UserInterFace/Pages/Bookings/RescheduleBooking"));
+const OwnerSettingsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/OwnerProfile"));
+const PitchDashboard = lazy(() => import("../UserInterFace/Pages/DashBoards/Pitch/Pitch"));
+const ReportsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Reports"));
+const VenueSettingsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Venue/Settings"));
+const PitchSettingsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Pitch/Settings"));
+const MoreActions = lazy(() => import("../UserInterFace/Pages/DashBoards/Pitch/MoreActions").then(m => ({ default: m.MoreActions })));
+const VenueTableSettingsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Venue/Table/TableDetails"));
+const NotFoundPage = lazy(() => import("../UserInterFace/Components/Common/NotFoundPage"));
+const Root = lazy(() => import("../UserInterFace/Components/Common/RootRedirect").then(m => ({ default: m.Root })));
+const VenueConsolesPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Venue/ManageConsoles").then(m => ({ default: m.VenueConsolesPage })));
+const VenueMoreActionsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Venue/MoreActions").then(m => ({ default: m.VenueMoreActionsPage })));
+const SuccessPage = lazy(() => import("../UserInterFace/Pages/Shared/SuccessPage"));
+const ErrorPage = lazy(() => import("../UserInterFace/Pages/Shared/ErrorPage"));
+const PitchReviewsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Pitch/PitchReviewsPage"));
+const VenueReviewsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Venue/VenueReviewsPage"));
+
+const Suspended = ({ children }: { children: React.ReactNode }) => (
+  <Suspense fallback={<Loading text="" />}>
+    {children}
+  </Suspense>
+);
 
 export const router = createBrowserRouter([
   {
-    
-    
     path: "/auth",
-    element: <AuthLayOut />,
-    errorElement: <ErrorPage />, 
+    element: <Suspended><AuthLayOut /></Suspended>,
+    errorElement: <Suspended><ErrorPage /></Suspended>,
     children: [
- 
-   
       {
         index: true,
-        element: <Navigate to="login" replace />, 
+        element: <Navigate to="login" replace />,
       },
       {
         path: "login",
-        element: <Login />,
+        element: <Suspended><Login /></Suspended>,
       },
       {
         path: "register",
-        element: <Registration />,
+        element: <Suspended><Registration /></Suspended>,
       },
       {
         path: "forget-password",
-        element: <ForgetPassword />,
+        element: <Suspended><ForgetPassword /></Suspended>,
       },
       {
         path: "reset-password",
-        element: 
-          <ResetPassword />,
+        element: <Suspended><ResetPassword /></Suspended>,
       },
       {
         path: "change-password",
-        element: <ProtectedRoute allowedRoles={["Customer","Owner"]} >
-                   <ChangePassword />
-                </ProtectedRoute>,
+        element: (
+          <ProtectedRoute allowedRoles={["Customer", "Owner"]}>
+            <Suspended><ChangePassword /></Suspended>
+          </ProtectedRoute>
+        ),
       },
     ],
   },
   {
-   path: "success",
-   element: <SuccessPage />,
+    path: "success",
+    element: <Suspended><SuccessPage /></Suspended>,
   },
-
   {
     path: "*",
-    element: <NotFoundPage />,
+    element: <Suspended><NotFoundPage /></Suspended>,
   },
   {
     path: "/dashboard",
-        errorElement: <ErrorPage />, 
+    errorElement: <Suspended><ErrorPage /></Suspended>,
     element: (
-      <ProtectedRoute allowedRoles={["Owner"]} >
-        <DashboardLayout />
+      <ProtectedRoute allowedRoles={["Owner"]}>
+        <Suspended><DashboardLayout /></Suspended>
       </ProtectedRoute>
     ),
     children: [
       {
         path: "profile",
-        element: <OwnerSettingsPage />,
+        element: <Suspended><OwnerSettingsPage /></Suspended>,
       },
       {
         path: "pitch/:id",
-        element: <PitchDashboard />,
+        element: <Suspended><PitchDashboard /></Suspended>,
       },
       {
         path: "pitch/:id/reviews",
-        element: <PitchReviewsPage />,
+        element: <Suspended><PitchReviewsPage /></Suspended>,
       },
       {
         path: "pitch/:id/settings",
-        element: <PitchSettingsPage />,
+        element: <Suspended><PitchSettingsPage /></Suspended>,
       },
       {
         path: "pitch/:id/more-actions",
-        element: <MoreActions />,
+        element: <Suspended><MoreActions /></Suspended>,
       },
       {
         path: "venue/:id",
-        element: <VenueDashboard />,
+        element: <Suspended><VenueDashboard /></Suspended>,
       },
       {
         path: "venue/:id/reviews",
-        element: <VenueReviewsPage />,
+        element: <Suspended><VenueReviewsPage /></Suspended>,
       },
       {
         path: "venue/:id/settings",
-        element: <VenueSettingsPage />,
+        element: <Suspended><VenueSettingsPage /></Suspended>,
       },
-       {
+      {
         path: "venue/:id/consoles-management",
-        element: <VenueConsolesPage />,
+        element: <Suspended><VenueConsolesPage /></Suspended>,
       },
       {
         path: "venue/:id/more-actions",
-        element: <VenueMoreActionsPage />, 
+        element: <Suspended><VenueMoreActionsPage /></Suspended>,
       },
       {
         path: "venue/:id/table/:tableId",
-        element: <VenueTableSettingsPage />,
+        element: <Suspended><VenueTableSettingsPage /></Suspended>,
       },
       {
         path: ":type/:id/reports",
-        element: <ReportsPage />,
+        element: <Suspended><ReportsPage /></Suspended>,
       },
     ],
   },
   {
     path: "setup",
     element: (
-      <ProtectedRoute allowedRoles={["Owner"]} >
-        <SetupEntityPage />
+      <ProtectedRoute allowedRoles={["Owner"]}>
+        <Suspended><SetupEntityPage /></Suspended>
       </ProtectedRoute>
     ),
   },
   {
-    element: <AppLayout />,
-    errorElement: <ErrorPage />, 
+    element: <Suspended><AppLayout /></Suspended>,
+    errorElement: <Suspended><ErrorPage /></Suspended>,
     children: [
       {
         path: "home",
-        element: <Home />,
+        element: <Suspended><Home /></Suspended>,
       },
       {
         path: "explore",
-        element: <Explore />,
+        element: <Suspended><Explore /></Suspended>,
       },
       {
         path: "top-ratings",
-        element: <TopRatings />,
+        element: <Suspended><TopRatings /></Suspended>,
       },
       {
         path: "pitches",
-        element: <Pitches />,
+        element: <Suspended><Pitches /></Suspended>,
       },
       {
         path: "pitches/:id",
-        element: <PlaceDetails />,
+        element: <Suspended><PlaceDetails /></Suspended>,
       },
       {
         path: "pitches/:id/booking",
         element: (
-           <ProtectedRoute allowedRoles={["Customer"]} >
-              <BookingPage />
+          <ProtectedRoute allowedRoles={["Customer"]}>
+            <Suspended><BookingPage /></Suspended>
           </ProtectedRoute>
         ),
       },
       {
         path: "venues",
-        element: <Venues />,
+        element: <Suspended><Venues /></Suspended>,
       },
       {
         path: "venues/:id",
-        element: <VenueDetails />,
+        element: <Suspended><VenueDetails /></Suspended>,
       },
       {
         path: "venues/:id/floor",
-        element: <LiveFloorPlan />,
+        element: <Suspended><LiveFloorPlan /></Suspended>,
       },
       {
         path: "venues/:id/booking/:tId",
         element: (
-          <ProtectedRoute allowedRoles={["Customer"]} >
-            <BookingPage />
+          <ProtectedRoute allowedRoles={["Customer"]}>
+            <Suspended><BookingPage /></Suspended>
           </ProtectedRoute>
         ),
       },
       {
         path: "profile",
         element: (
-          <ProtectedRoute allowedRoles={["Customer"]} >
-            <Profile />
+          <ProtectedRoute allowedRoles={["Customer"]}>
+            <Suspended><Profile /></Suspended>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "profile/bookings/:bookingId/reschedule",
+        element: (
+          <ProtectedRoute allowedRoles={["Customer"]}>
+            <Suspended><RescheduleBookingPage /></Suspended>
           </ProtectedRoute>
         ),
       },
     ],
   },
-    {
+  {
     path: "/",
-    element: <Root/>, 
-    errorElement: <ErrorPage />,
+    element: <Suspended><Root /></Suspended>,
+    errorElement: <Suspended><ErrorPage /></Suspended>,
   },
 ]);

@@ -1,8 +1,8 @@
-import soccerField from "../../Images/premium_synthetic_turf_football_field_at_nig.jpg"; 
-import sportsCafe from "../../Images/premium_synthetic_turf_cozy_cafe_interior_mo.jpg";
-import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.jpg";
-import tennisCourt from "../../Images/professional_hardcourt_tennis_court_at_twili.jpg";
-import padelCourt from "../../Images/modern_panoramic_padel_tennis_court_at_eveni.jpg";
+import soccerField from "../../Images/premium_synthetic_turf_football_field_at_nig.webp"; 
+import sportsCafe from "../../Images/VIP_esports_gaming_lounge_and_console_statio.webp";
+import billiardLounge from "../../Images/billiard_table_in_a_modern_lounge_clo.webp";
+import tennisCourt from "../../Images/professional_hardcourt_tennis_court_at_twili.webp";
+import padelCourt from "../../Images/professional_hardcourt_tennis_court_at_twili.webp";
 import type { PlaceSubType } from "../../../BackEndIntegration/Types/Enums/AppEnums";
 
 
@@ -32,6 +32,8 @@ export function Image({ item }: { item: PlaceSearchDto }) {
     <img
       src={imageSrc}
       alt={item.name}
+      loading="lazy"
+      decoding="async"
       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
       onError={(e) => {
         if (e.currentTarget.src !== fallbackImage) {

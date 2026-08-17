@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import errorIllust from "../../Images/errororofflineUI.png";
+import errorIllust from "../../Images/errororofflineUI.webp";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 export default function ErrorPage() {
@@ -8,11 +8,18 @@ export default function ErrorPage() {
   const { t } = useLanguage();
 
   const { 
-    title = t('messages.DEFAULT_ERROR_TITLE'), 
-    message = t('messages.DEFAULT_ERROR_MESSAGE'), 
+    titleKey,
+    messageKey,
+    title, 
+    message, 
     redirectUrl = -1, 
-    buttonText = t('messages.DEFAULT_ERROR_BUTTON') 
+    buttonTextKey,
+    buttonText 
   } = location.state || {};
+
+  const displayTitle = titleKey ? t(titleKey) : (title || t('messages.DEFAULT_ERROR_TITLE'));
+  const displayMessage = messageKey ? t(messageKey) : (message || t('messages.DEFAULT_ERROR_MESSAGE'));
+  const displayButtonText = buttonTextKey ? t(buttonTextKey) : (buttonText || t('messages.DEFAULT_ERROR_BUTTON'));
 
   const handleAction = () => {
     if (typeof redirectUrl === 'number') {
@@ -32,19 +39,19 @@ export default function ErrorPage() {
         <div className="relative mb-6 flex items-center justify-center w-48 h-48">
           <img 
             src={errorIllust} 
-            alt={title} 
+            alt={displayTitle} 
             className="w-full h-full object-contain transform hover:scale-105 transition-transform duration-500" 
           />
         </div>
 
         {/* النص باللون الكحلي الغامق جداً */}
         <h1 className="text-3xl md:text-4xl font-extrabold text-shamelco-darker mb-4 tracking-tight">
-          {title}
+          {displayTitle}
         </h1>
         
         {/* الوصف باللون الأحمر الخفيف أو البترولي ليدل على المشكلة */}
         <p className="text-lg text-shamelco-accent/80 mb-10 leading-relaxed font-medium">
-          {message}
+          {displayMessage}
         </p>
 
         {/* زر الإجراء: هنا جعلته باللون الكحلي الغامق ليعطي ثباتاً، وعند الهوفر يصبح ذهبياً */}
@@ -52,7 +59,7 @@ export default function ErrorPage() {
           onClick={handleAction}
           className="bg-shamelco-dark text-white font-bold text-lg px-10 py-4 rounded-xl shadow-md hover:bg-shamelco-gold hover:text-shamelco-darker transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-4 focus:ring-shamelco-gold/30 w-full md:w-auto"
         >
-          {buttonText}
+          {displayButtonText}
         </button>
       </div>
     </div>

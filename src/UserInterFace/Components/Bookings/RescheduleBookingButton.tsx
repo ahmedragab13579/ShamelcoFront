@@ -1,5 +1,4 @@
-import { useState } from "react";
-import RescheduleBookingModal from "./RescheduleBookingModal";
+import { useNavigate } from "react-router-dom";
 import type { GUID } from "../../../BackEndIntegration/Types/shared/Guid";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
@@ -8,23 +7,15 @@ interface RescheduleBookingButtonProps {
 }
 
 export default function RescheduleBookingButton({ bookingId }: RescheduleBookingButtonProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   const { t } = useLanguage();
 
   return (
-    <>
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700 transition-colors"
-      >
-        {t('messages.RESCHEDULE')}
-      </button>
-
-      <RescheduleBookingModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        bookingId={bookingId}
-      />
-    </>
+    <button
+      onClick={() => navigate(`/profile/bookings/${bookingId}/reschedule`)}
+      className="px-4 py-2 text-sm font-bold text-shamelco-darker bg-shamelco-gold/20 hover:bg-shamelco-gold text-shamelco-gold hover:text-shamelco-darker border border-shamelco-gold/30 rounded-xl transition-all duration-300 active:scale-[0.98] cursor-pointer"
+    >
+      {t('messages.RESCHEDULE') || "إعادة جدولة"}
+    </button>
   );
 }

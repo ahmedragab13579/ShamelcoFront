@@ -79,9 +79,9 @@ export function useBookingSubmission({
       // حالة: فشل الحجز (أو فشل الحجز والدفع معاً) -> التوجيه لصفحة الـ Error
       nav("/error", {
         state: {
-          title: "عفواً، حدث خطأ في الحجز! ❌",
-          message: "لم نتمكن من تسجيل حجزك في الوقت الحالي. برجاء المحاولة مرة أخرى لاحقاً.",
-          buttonText: "العودة للرئيسية 🏠",
+          titleKey: "messages.BOOKING_ERROR_TITLE",
+          messageKey: "messages.BOOKING_ERROR_MSG",
+          buttonTextKey: "messages.BACK_TO_HOME",
           redirectUrl: "/home"
         }
       });
@@ -106,20 +106,20 @@ export function useBookingSubmission({
       if (paymentResult.data.link) {
         nav("/success", {
           state: {
-            title: "تم تسجيل الحجز المبدئي! ⏳",
-            message: "تم حفظ حجزك بنجاح. يرجى إتمام عملية الدفع لتأكيد الحجز بشكل نهائي.",
-            redirectUrl: paymentResult.data.link,
-            buttonText: "الانتقال لصفحة الدفع 💳"
+            titleKey: "messages.INITIAL_BOOKING_SUCCESS_TITLE",
+            messageKey: "messages.INITIAL_BOOKING_SUCCESS_MSG",
+            buttonTextKey: "messages.PROCEED_TO_PAYMENT",
+            redirectUrl: paymentResult.data.link
           }
         });
       } else {
         // حالة: نجاح الحجز + نجاح الدفع (كاش)
         nav("/success", {
           state: {
-            title: "تم تأكيد الحجز! 🎉",
-            message: "تم تأكيد حجزك بنجاح، بانتظارك في الموعد المحدد.",
-            redirectUrl: "/home",
-            buttonText: "العودة للرئيسية 🏠"
+            titleKey: "messages.BOOKING_CONFIRMED_TITLE",
+            messageKey: "messages.BOOKING_CONFIRMED_MSG",
+            buttonTextKey: "messages.BACK_TO_HOME",
+            redirectUrl: "/home"
           }
         });
       }
@@ -129,10 +129,10 @@ export function useBookingSubmission({
       // حالة: نجاح الحجز + فشل الدفع -> التوجيه لصفحة الـ Success مع تنبيه الدفع كاش
       nav("/success", {
         state: {
-          title: "تم تسجيل الحجز المبدئي! ⏳",
-          message: "لقد تم تسجيل حجزك بنجاح، ولكن تعذر إتمام الدفع الأونلاين. الرجاء الدفع عند الحضور في المقر.",
-          redirectUrl: "/home",
-          buttonText: "الانتقال للصفحة الرئيسية 🏠"
+          titleKey: "messages.INITIAL_BOOKING_SUCCESS_TITLE",
+          messageKey: "messages.ONLINE_PAYMENT_FAILED_PAY_AT_VENUE",
+          buttonTextKey: "messages.BACK_TO_HOME",
+          redirectUrl: "/home"
         }
       });
     }

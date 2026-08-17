@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../Components/Auth/Shared/Header";
 import Footer from "../Components/Auth/Shared/Footer";
-import authHeroBanner from "../Images/composite_banner_for_a_sports.jpg";
+import authHeroBanner from "../Images/composite_banner_for_a_sports.webp";
 import Language from "../Components/Common/Language";
 import { useLanguage } from "../Hooks/Shared/useLanguage";
 

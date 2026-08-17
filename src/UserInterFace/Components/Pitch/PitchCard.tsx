@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react"; 
 import type { MiniPitchDto } from "../../../BackEndIntegration/Types/Pitch/Response";
-import padelCourt from "../../Images/modern_panoramic_padel_tennis_court_at_eveni.jpg";
-import soccerField from "../../Images/premium_synthetic_turf_football_field_at_nig.jpg";
-import tennisCourt from "../../Images/professional_hardcourt_tennis_court_at_twili.jpg";
+import padelCourt from "../../Images/professional_hardcourt_tennis_court_at_twili.webp";
+import soccerField from "../../Images/premium_synthetic_turf_football_field_at_nig.webp";
+import tennisCourt from "../../Images/professional_hardcourt_tennis_court_at_twili.webp";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 function Image({ name, type, mainImage }: MiniPitchDto) {

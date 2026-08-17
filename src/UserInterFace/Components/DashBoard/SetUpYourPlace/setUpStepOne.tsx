@@ -1,8 +1,8 @@
 import React from "react";
 import { Trophy, Gamepad2 } from "lucide-react"; 
 import type { PlaceType } from "../../../../BackEndIntegration/Types/Enums/AppEnums";
-import setupPitchIllust from "../../../Images/futuristic_illustration_representing_sports_manag.jpg";
-import setupVenueIllust from "../../../Images/futuristic_illustration_representing_entertainmen.jpg";
+import setupPitchIllust from "../../../Images/futuristic_illustration_representing_sports_manag.webp";
+import setupVenueIllust from "../../../Images/futuristic_illustration_representing_entertainmen.webp";
 import { useLanguage } from "../../../Hooks/Shared/useLanguage";
 
 interface SetupStepOneProps {

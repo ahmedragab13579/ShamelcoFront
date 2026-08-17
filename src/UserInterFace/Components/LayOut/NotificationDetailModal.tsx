@@ -10,7 +10,7 @@ interface NotificationDetailModalProps {
 }
 
 export default function NotificationDetailModal({ notification, onClose }: NotificationDetailModalProps) {
-  const { t, currentLang, isRtl } = useLanguage();
+  const { t, i18n, currentLang, isRtl } = useLanguage();
   useEffect(() => {
     if (notification) {
       document.body.style.overflow = "hidden";
@@ -23,6 +23,21 @@ export default function NotificationDetailModal({ notification, onClose }: Notif
   }, [notification]);
 
   if (!notification) return null;
+
+  const getLocalizedText = (text: string | null | undefined) => {
+    if (!text) return "";
+    const key = `messages.${text}`;
+    if (i18n.exists(key)) {
+      return t(key);
+    }
+    return text;
+  };
+
+  const rawTitle = (currentLang === "ar" ? notification.titleAr : notification.titleEn) || notification.titleEn || notification.titleAr;
+  const displayTitle = getLocalizedText(rawTitle);
+
+  const rawMessage = (currentLang === "ar" ? notification.messageAr : notification.messageEn) || notification.messageEn || notification.messageAr;
+  const displayMessage = getLocalizedText(rawMessage);
 
   const getTypeConfiguration = (type: string) => {
     const normalizedType = type?.toLowerCase();
@@ -124,13 +139,13 @@ export default function NotificationDetailModal({ notification, onClose }: Notif
           </div>
 
           <h4 className="text-lg font-black text-shamelco-darker leading-snug">
-            {currentLang === "ar" ? notification.titleAr : notification.titleEn}
+            {displayTitle}
           </h4>
 
           {/* مربع الرسالة الداخلي */}
           <div className="bg-shamelco-bg dark:bg-shamelco-dark/20 p-5 rounded-2xl border border-shamelco-border min-h-[100px]">
             <p className="text-sm font-medium text-shamelco-darker leading-relaxed whitespace-pre-wrap select-text">
-              {currentLang === "ar" ? notification.messageAr : notification.messageEn}
+              {displayMessage}
             </p>
           </div>
 
