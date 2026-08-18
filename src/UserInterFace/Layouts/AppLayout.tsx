@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../Components/LayOut/App/Header";
 import BottomNavigation from "../Components/LayOut/App/BottomNavigation";
+import Footer from "../Components/LayOut/App/Footer";
 import { useState } from "react";
 import NotificationSidebar from "../Components/LayOut/NotificationSidebar";
 import { useLanguage } from "../Hooks/Shared/useLanguage";
@@ -20,6 +21,9 @@ export default function AppLayout() {
         <Outlet />
       </main>
       
+      {/* الفوتر العام للموقع */}
+      <Footer />
+
       {/* القائمة الجانبية للإشعارات */}
       <NotificationSidebar 
         isOpen={isSidebarOpen} 

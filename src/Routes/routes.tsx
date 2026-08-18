@@ -37,8 +37,14 @@ const VenueConsolesPage = lazy(() => import("../UserInterFace/Pages/DashBoards/V
 const VenueMoreActionsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Venue/MoreActions").then(m => ({ default: m.VenueMoreActionsPage })));
 const SuccessPage = lazy(() => import("../UserInterFace/Pages/Shared/SuccessPage"));
 const ErrorPage = lazy(() => import("../UserInterFace/Pages/Shared/ErrorPage"));
+const PaymentResultPage = lazy(() => import("../UserInterFace/Pages/Shared/PaymentResultPage"));
 const PitchReviewsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Pitch/PitchReviewsPage"));
 const VenueReviewsPage = lazy(() => import("../UserInterFace/Pages/DashBoards/Venue/VenueReviewsPage"));
+
+const ContactUs = lazy(() => import("../UserInterFace/Pages/Shared/ContactUs"));
+const AboutUs = lazy(() => import("../UserInterFace/Pages/Shared/AboutUs"));
+const PrivacyPolicy = lazy(() => import("../UserInterFace/Pages/Shared/PrivacyPolicy"));
+const RefundPolicy = lazy(() => import("../UserInterFace/Pages/Shared/RefundPolicy"));
 
 const Suspended = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<Loading text="" />}>
@@ -85,6 +91,10 @@ export const router = createBrowserRouter([
   {
     path: "success",
     element: <Suspended><SuccessPage /></Suspended>,
+  },
+  {
+    path: "payment-result",
+    element: <Suspended><PaymentResultPage /></Suspended>,
   },
   {
     path: "*",
@@ -224,6 +234,22 @@ export const router = createBrowserRouter([
             <Suspended><RescheduleBookingPage /></Suspended>
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "contact",
+        element: <Suspended><ContactUs /></Suspended>,
+      },
+      {
+        path: "about",
+        element: <Suspended><AboutUs /></Suspended>,
+      },
+      {
+        path: "privacy-policy",
+        element: <Suspended><PrivacyPolicy /></Suspended>,
+      },
+      {
+        path: "refund-policy",
+        element: <Suspended><RefundPolicy /></Suspended>,
       },
     ],
   },
