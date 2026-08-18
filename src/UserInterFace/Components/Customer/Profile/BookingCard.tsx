@@ -95,7 +95,9 @@ export default function BookingCard({ item, type, isUpcoming }: BookingCardProps
       {/* الجزء السفلي: أزرار العمليات */}
       {isUpcoming && (
         <div className="flex items-center justify-end gap-3 px-5 py-3.5 bg-shamelco-bg/80 border-t border-shamelco-dark/5">
-          <RescheduleBookingButton bookingId={item.bookingId} />
+          {(item.status === 'Pending' || item.status === 'Confirmed') && new Date(item.startTime) > new Date() && (
+            <RescheduleBookingButton bookingId={item.bookingId} />
+          )}
           
           {item.canCancel && (
              <CancelBookingButton bookingId={item.bookingId} />

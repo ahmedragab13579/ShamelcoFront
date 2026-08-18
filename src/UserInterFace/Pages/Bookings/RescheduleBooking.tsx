@@ -87,6 +87,18 @@ export default function RescheduleBookingPage() {
 
   const booking = bookingResult.data;
 
+  // Rescheduling guards
+  const bookingStartTime = new Date(booking.startTime);
+  const now = new Date();
+  const isStartedOrActive = bookingStartTime <= now || ["InProgress", "CheckedIn", "Completed", "Cancelled", "NoShow"].includes(booking.status);
+
+  const isVenue = booking.bookingType?.toLowerCase().includes("venue");
+  const requiredNoticeHours = isVenue ? 24 : 72;
+  const hoursUntilBooking = (bookingStartTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+  const isNoticeExpired = hoursUntilBooking < requiredNoticeHours;
+
+  const cannotReschedule = isStartedOrActive || isNoticeExpired;
+
   // Local ISO string for input min attribute (YYYY-MM-DDTHH:mm)
   const minDateTime = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
@@ -109,6 +121,29 @@ export default function RescheduleBookingPage() {
             {t('messages.RESCHEDULE_BOOKING')}
           </h1>
         </div>
+
+        {/* Cannot Reschedule Error Banner */}
+        {cannotReschedule && (
+          <div className="bg-rose-50 border-2 border-rose-200 p-6 rounded-3xl text-rose-950 space-y-3 text-center">
+            <h3 className="text-lg font-bold">
+              {t('messages.CANNOT_RESCHEDULE') || "Cannot Reschedule This Booking"}
+            </h3>
+            <p className="text-sm font-medium text-rose-900 leading-relaxed">
+              {isStartedOrActive
+                ? (t('messages.CANNOT_RESCHEDULE_ACTIVE_MSG') || "You cannot reschedule a current, active, or in-progress booking.")
+                : (isVenue 
+                    ? (t('messages.VENUE_NOTICE_REQUIRED_MSG') || "Venue bookings can only be rescheduled at least 24 hours prior to the appointment time.")
+                    : (t('messages.PITCH_NOTICE_REQUIRED_MSG') || "Sports pitch bookings can only be rescheduled at least 72 hours (3 days) prior to the appointment time."))
+              }
+            </p>
+            <button
+              onClick={() => navigate("/profile")}
+              className="mt-2 px-6 py-2.5 bg-rose-900 text-white font-bold rounded-xl hover:bg-rose-950 transition-all text-sm cursor-pointer"
+            >
+              {t('messages.BACK_TO_PROFILE') || "Back to Profile"}
+            </button>
+          </div>
+        )}
 
         {/* Current Booking Info Card */}
         <div className="bg-shamelco-surface border border-shamelco-dark/10 p-6 rounded-3xl shadow-sm space-y-4">
@@ -146,69 +181,71 @@ export default function RescheduleBookingPage() {
           </div>
         </div>
 
-        {/* Reschedule Form */}
-        <div className="bg-shamelco-surface border border-shamelco-dark/10 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
-          <h2 className="text-lg font-bold text-shamelco-darker">
-            {t('messages.SELECT_NEW_TIME')}
-          </h2>
+        {/* Reschedule Form (Only shown if eligible) */}
+        {!cannotReschedule && (
+          <div className="bg-shamelco-surface border border-shamelco-dark/10 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
+            <h2 className="text-lg font-bold text-shamelco-darker">
+              {t('messages.SELECT_NEW_TIME')}
+            </h2>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <SharedInput
-              label={t('messages.NEW_START_TIME')}
-              type="datetime-local"
-              min={minDateTime}
-              error={errors.newStartTime?.message}
-              {...register("newStartTime", {
-                required: t('messages.SELECT_START_TIME_REQ'),
-                validate: (value) => {
-                  if (new Date(value) < new Date()) {
-                    return t('messages.START_TIME_MUST_BE_FUTURE');
-                  }
-                  return true;
-                },
-              })}
-            />
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <SharedInput
+                label={t('messages.NEW_START_TIME')}
+                type="datetime-local"
+                min={minDateTime}
+                error={errors.newStartTime?.message}
+                {...register("newStartTime", {
+                  required: t('messages.SELECT_START_TIME_REQ'),
+                  validate: (value) => {
+                    if (new Date(value) < new Date()) {
+                      return t('messages.START_TIME_MUST_BE_FUTURE');
+                    }
+                    return true;
+                  },
+                })}
+              />
 
-            <SharedInput
-              label={t('messages.NEW_END_TIME')}
-              type="datetime-local"
-              min={startTime || minDateTime}
-              error={errors.newEndTime?.message}
-              {...register("newEndTime", {
-                required: t('messages.SELECT_END_TIME_REQ'),
-                validate: (value) => {
-                  if (startTime && new Date(value) <= new Date(startTime)) {
-                    return t('messages.END_TIME_MUST_BE_AFTER_START');
-                  }
-                  if (new Date(value) < new Date()) {
-                    return t('messages.START_TIME_MUST_BE_FUTURE');
-                  }
-                  return true;
-                },
-              })}
-            />
+              <SharedInput
+                label={t('messages.NEW_END_TIME')}
+                type="datetime-local"
+                min={startTime || minDateTime}
+                error={errors.newEndTime?.message}
+                {...register("newEndTime", {
+                  required: t('messages.SELECT_END_TIME_REQ'),
+                  validate: (value) => {
+                    if (startTime && new Date(value) <= new Date(startTime)) {
+                      return t('messages.END_TIME_MUST_BE_AFTER_START');
+                    }
+                    if (new Date(value) < new Date()) {
+                      return t('messages.START_TIME_MUST_BE_FUTURE');
+                    }
+                    return true;
+                  },
+                })}
+              />
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-shamelco-dark/5">
-              <button
-                type="button"
-                onClick={() => navigate(-1)}
-                disabled={isPending}
-                className="px-6 py-3 text-sm font-bold text-shamelco-dark bg-shamelco-bg rounded-xl hover:bg-shamelco-dark/10 transition-colors disabled:opacity-50 cursor-pointer"
-              >
-                {t('messages.CANCEL') || "إلغاء"}
-              </button>
-              
-              <button
-                type="submit"
-                disabled={isPending}
-                className="px-8 py-3 text-sm font-bold text-shamelco-darker bg-shamelco-gold rounded-xl hover:bg-shamelco-gold-hover shadow-gold active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2 cursor-pointer"
-              >
-                {isPending && <span className="w-4 h-4 border-2 border-shamelco-darker border-t-transparent rounded-full animate-spin" />}
-                <span>{t('messages.CONFIRM_RESCHEDULING') || "تأكيد إعادة الجدولة"}</span>
-              </button>
-            </div>
-          </form>
-        </div>
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-shamelco-dark/5">
+                <button
+                  type="button"
+                  onClick={() => navigate(-1)}
+                  disabled={isPending}
+                  className="px-6 py-3 text-sm font-bold text-shamelco-dark bg-shamelco-bg rounded-xl hover:bg-shamelco-dark/10 transition-colors disabled:opacity-50 cursor-pointer"
+                >
+                  {t('messages.CANCEL') || "إلغاء"}
+                </button>
+                
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="px-8 py-3 text-sm font-bold text-shamelco-darker bg-shamelco-gold rounded-xl hover:bg-shamelco-gold-hover shadow-gold active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  {isPending && <span className="w-4 h-4 border-2 border-shamelco-darker border-t-transparent rounded-full animate-spin" />}
+                  <span>{t('messages.CONFIRM_RESCHEDULING') || "تأكيد إعادة الجدولة"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
 
       </div>
     </div>

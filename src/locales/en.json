@@ -805,6 +805,9 @@
     "CONTACT_US": "Contact Us",
     "PRIVACY_POLICY": "Privacy Policy",
     "REFUND_POLICY": "Refund & Cancellation Policy",
-    "EXPLORE": "Explore"
+    "EXPLORE": "Explore",
+    "CANNOT_RESCHEDULE_ACTIVE_MSG": "You cannot reschedule a current, active, or in-progress booking.",
+    "VENUE_NOTICE_REQUIRED_MSG": "Venue bookings can only be rescheduled at least 24 hours prior to the appointment time.",
+    "PITCH_NOTICE_REQUIRED_MSG": "Sports pitch bookings can only be rescheduled at least 72 hours (3 days) prior to the appointment time."
   }
 }
