@@ -1,4 +1,4 @@
-import { ShieldCheck, Flame, Tv, Coffee, Award, Users, Trophy } from "lucide-react";
+import { ShieldCheck, Flame, Tv, Coffee, Trophy } from "lucide-react";
 import { useLanguage } from "../../Hooks/Shared/useLanguage";
 
 export default function AboutUs() {
