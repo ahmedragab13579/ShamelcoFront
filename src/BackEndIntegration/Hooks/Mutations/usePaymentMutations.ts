@@ -34,7 +34,9 @@ export const useInitiatePaymentMutation = () => {
           queryClient.invalidateQueries({ queryKey: venueKeys.availability(response.data.targetTableId) });
       }
       
-      toast.success(t('messages.PAYMENT_LINK_GENERATED_SUCCESSFULLY'));
+      if (variables.PaymentMethod !== 'Cash' && response.data?.link) {
+        toast.success(t('messages.PAYMENT_LINK_GENERATED_SUCCESSFULLY'));
+      }
     },
     onError: (error) => {
       toast.error(getLocalizedMessage(error?.code));
