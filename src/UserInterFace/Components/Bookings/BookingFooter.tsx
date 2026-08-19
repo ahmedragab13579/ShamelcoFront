@@ -27,9 +27,9 @@ export const BookingFooter = ({
   const { t } = useLanguage();
 
   const methods = [
-    { id: 'Card', label: t('messages.CARD'), icon: CreditCard },
-    { id: 'MobileWallet', label: t('messages.MOBILE_WALLET'), icon: Wallet },
-    { id: 'Cash', label: t('messages.CASH'), icon: Banknote },
+    { id: 'Card', label: t('messages.CARD'), icon: CreditCard, disabled: true },
+    { id: 'MobileWallet', label: t('messages.MOBILE_WALLET'), icon: Wallet, disabled: true },
+    { id: 'Cash', label: t('messages.CASH'), icon: Banknote, disabled: false },
   ] as const;
 
   return (
@@ -41,11 +41,14 @@ export const BookingFooter = ({
           {methods.map((method) => (
             <button 
               key={method.id}
-              onClick={() => setPaymentMethod(method.id as PaymentMethod)}
-              className={`py-3 flex flex-col sm:flex-row items-center justify-center gap-2 rounded-md border text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
-                paymentMethod === method.id 
-                  ? 'bg-shamelco-gold text-shamelco-darker border-shamelco-gold shadow-gold' 
-                  : 'bg-shamelco-bg border-shamelco-border text-shamelco-muted hover:border-shamelco-gold/50'
+              disabled={method.disabled}
+              onClick={() => !method.disabled && setPaymentMethod(method.id as PaymentMethod)}
+              className={`py-3 flex flex-col sm:flex-row items-center justify-center gap-2 rounded-md border text-xs sm:text-sm font-bold transition-all duration-200 ${
+                method.disabled
+                  ? 'bg-shamelco-bg/50 border-shamelco-border text-shamelco-muted/40 cursor-not-allowed opacity-50'
+                  : paymentMethod === method.id 
+                    ? 'bg-shamelco-gold text-shamelco-darker border-shamelco-gold shadow-gold cursor-pointer' 
+                    : 'bg-shamelco-bg border-shamelco-border text-shamelco-muted hover:border-shamelco-gold/50 cursor-pointer'
               }`}
             >
               <method.icon className="w-4 h-4" />

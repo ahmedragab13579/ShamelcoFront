@@ -27,7 +27,7 @@ export function useBookingSubmission({
   finalTotal
 }: UseBookingSubmissionProps) {
   const nav = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Card');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Cash');
   const [walletNumber, setWalletNumber] = useState<string>();
 
   const { mutateAsync: createPitchBooking, isPending: isPitchBooking } = useCreatePitchBookingMutation();
